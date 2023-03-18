@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace NeoCortexApi.Encoders
 {
@@ -19,11 +17,6 @@ namespace NeoCortexApi.Encoders
     /// </summary>
     public class ScalarEncoder : EncoderBase
     {
-        private int v1;
-        private int v2;
-        private int v3;
-        private bool v4;
-
         /// <summary>
         /// Gets a value indicating whether IsDelta
         /// </summary>
@@ -48,14 +41,6 @@ namespace NeoCortexApi.Encoders
         public ScalarEncoder(Dictionary<string, object> encoderSettings)
         {
             this.Initialize(encoderSettings);
-        }
-
-        public ScalarEncoder(int v1, int v2, int v3, bool v4)
-        {
-            this.v1 = v1;
-            this.v2 = v2;
-            this.v3 = v3;
-            this.v4 = v4;
         }
 
         /// <summary>
@@ -90,7 +75,7 @@ namespace NeoCortexApi.Encoders
             // each case here.
             InitEncoder(W, MinVal, MaxVal, N, Radius, Resolution);
 
-            //nInternal represents the output area excluding the possible padding on each side
+            //nInternal represents the output _area excluding the possible padding on each side
             NInternal = N - 2 * Padding;
 
             if (Name == null)
@@ -120,7 +105,7 @@ namespace NeoCortexApi.Encoders
 
         protected void InitEncoder(int w, double minVal, double maxVal, int n, double radius, double resolution)
         {
-            if (N != 0)
+            if (n != 0)
             {
                 if (double.NaN != minVal && double.NaN != maxVal)
                 {
@@ -239,7 +224,9 @@ namespace NeoCortexApi.Encoders
                 centerbin = ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding;
             }
 
-            return centerbin - HalfWidth;
+            
+            
+           return centerbin - HalfWidth;
         }
 
 
@@ -249,92 +236,24 @@ namespace NeoCortexApi.Encoders
         /// <param name="inputData">The data to be encoded. Must be of type double.</param>
         /// <param name="bucketIndex">The bucket index.</param>
         /// <returns></returns>
-
-        public int? GetBucketIndex(decimal inputData)
+        /// Understanding the new method to get the bucket index.
+        /// Now Try to Implement Buckets Code While usinf Professor Hint
+        public int? GetBucketIndex(object inputData)
         {
-            if ((double)inputData < MinVal || (double)inputData > MaxVal)
+            double input = Convert.ToDouble(inputData, CultureInfo.InvariantCulture);
+            if (input == double.NaN)
             {
                 return null;
             }
 
-            decimal fraction = (decimal)(((double)inputData - MinVal) / (MaxVal - MinVal));
+            int? bucketVal = GetFirstOnBit(input);
 
-            if (Periodic)
-            {
-                fraction = fraction - Math.Floor(fraction);
-            }
-
-            int bucketIndex = (int)Math.Floor(fraction * N);
-
-            if (bucketIndex == N)
-            {
-                bucketIndex = 0;
-            }
-
-            // For periodic encoders, the center of the first bucket is considered equal to the center of the last bucket
-            if (Periodic && bucketIndex == 0 && Math.Abs((double)inputData - MaxVal) <= 0.0000000000000000000000000001)
-            {
-                bucketIndex = N - 1;
-            }
-
-            // Check if the input value is within the radius of the bucket
-            if (Radius >= 0)
-            {
-                decimal bucketWidth = ((decimal)MaxVal - (decimal)MinVal) / (decimal)N;
-                decimal bucketCenter = (bucketWidth * bucketIndex) + (bucketWidth / 2) + (decimal)MinVal;
-
-                if (Math.Abs((decimal)inputData - bucketCenter) > (decimal)Radius * bucketWidth)
-                {
-                    return null;
-                }
-            }
-
-            return bucketIndex;
-
+            return bucketVal;
         }
 
-        public string GenerateRangeDescription(List<Tuple<double, double>> ranges)
-        {
-            var desc = "";
-            var numRanges = ranges.Count;
-            for (var i = 0; i < numRanges; i++)
-            {
-                if (ranges[i].Item1 != ranges[i].Item2)
-                {
-                    desc += $"{ranges[i].Item1:F2}-{ranges[i].Item2:F2}";
-                }
-                else
-                {
-                    desc += $"{ranges[i].Item1:F2}";
-                }
-
-                if (i < numRanges - 1)
-                {
-                    desc += ", ";
-                }
-            }
-
-            return desc;
-        }
-
-
-
-
-        /*
-                public int? GetBucketIndex(object inputData)
-                {
-                    double input = Convert.ToDouble(inputData, CultureInfo.InvariantCulture);
-                    if (input == double.NaN)
-                    {
-                        return null;
-                    }
-                    int? bucketVal = GetFirstOnBit(input);
-                    return bucketVal;
-                }
-               */
 
         /// <summary>
-        /// The Encode
+        /// Encodes the given scalar value as SDR as defined by HTM.
         /// </summary>
         /// <param name="inputData">The inputData<see cref="object"/></param>
         /// <returns>The <see cref="int[]"/></returns>
@@ -382,12 +301,6 @@ namespace NeoCortexApi.Encoders
         }
 
 
-
-
-
-
-
-
         /// <summary>
         /// This method enables running in the network.
         /// </summary>
@@ -408,10 +321,6 @@ namespace NeoCortexApi.Encoders
         {
             throw new NotImplementedException();
         }
-
-
-
-
 
         //public static object Deserialize<T>(StreamReader sr, string name)
         //{
