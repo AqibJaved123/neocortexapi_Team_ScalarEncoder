@@ -1,10 +1,11 @@
-﻿// Copyright (c) Damir Dobric. All rights reserved.
+﻿/ Copyright(c) Damir Dobric. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using NeoCortexApi.Entities;
 using NeoCortexApi.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace NeoCortexApi.Encoders
@@ -33,9 +34,9 @@ namespace NeoCortexApi.Encoders
         protected int nInternal;
 
         protected double rangeInternal;
-        
+
         protected bool encLearningEnabled;
-        
+
         protected List<FieldMetaType> flattenedFieldTypeList;
 
         protected Dictionary<Dictionary<string, int>, List<FieldMetaType>> decoderFieldTypes;
@@ -132,7 +133,7 @@ namespace NeoCortexApi.Encoders
             }
         }
 
-   
+
 
         /// <summary>
         /// In real cortex mode, W must be >= 21. Empirical value.
@@ -145,6 +146,21 @@ namespace NeoCortexApi.Encoders
         /// </summary>
 
         public int N { get => (int)this["N"]; set => this["N"] = (int)value; }
+
+        public int Verbosity { get => (int)this["Verbosity"]; set => this["Verbosity"] = (int)value; }
+
+        public int startIdx { get => (int)this["startIdx"]; set => this["startIdx"] = (int)value; }
+        public int runLength { get => (int)this["runLength"]; set => this["runLength"] = (int)value; }
+        public bool[] tmpOutput { get => (bool[])this["tmpOutput"]; set => this["tmpOutput"] = (bool[])value; }
+
+
+        public double run { get => (double)this["run"]; set => this["run"] = (double)value; }
+        /// <summary>
+        /// public double nz { get => (double)this["nz"]; set => this["nz"] = (double)value; }
+        /// </summary>
+        public double runs { get => (double)this["runs"]; set => this["runs"] = (double)value; }
+
+
 
         public int NInternal { get => (int)this["NInternal"]; set => this["NInternal"] = (int)value; }
 
@@ -173,7 +189,6 @@ namespace NeoCortexApi.Encoders
         /// It cats bits at the beginning with negative position and at th eend after last bit.
         /// This happens only if Periodic is set on false.
         /// </summary>
-        /// Analyze the code
         public bool ClipInput { get => (bool)this["ClipInput"]; set => this["ClipInput"] = (bool)value; }
 
         public int Padding { get => (int)this["Padding"]; set => this["Padding"] = value; }
@@ -271,7 +286,7 @@ namespace NeoCortexApi.Encoders
             Dictionary<string, int[]> sdrMap = new Dictionary<string, int[]>();
             List<string> inpVals = new List<string>();
             StringBuilder sb = new StringBuilder();
-            
+
             for (double i = this.MinVal; i < this.MaxVal; i += 1.0)
             {
                 var sdr = this.Encode(i);
@@ -281,7 +296,7 @@ namespace NeoCortexApi.Encoders
                 if (traceValues)
                 {
                     sb.AppendLine($"{i.ToString("000")} - {Helpers.StringifyVector(sdr, separator: null)}");
-                }                
+                }
             }
 
             sb.AppendLine();
@@ -320,8 +335,8 @@ namespace NeoCortexApi.Encoders
 
         public void Serialize(object obj, string name, StreamWriter sw)
         {
-            var excludeMembers = new List<string> 
-            { 
+            var excludeMembers = new List<string>
+            {
                 nameof(EncoderBase.Properties),
                 nameof(EncoderBase.halfWidth),
                 nameof(EncoderBase.rangeInternal),
@@ -347,5 +362,10 @@ namespace NeoCortexApi.Encoders
         {
             return this.Equals((object)other);
         }
+
+
+
+
+
     }
 }
