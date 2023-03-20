@@ -39,18 +39,108 @@ namespace UnitTestsProject.EncoderTests
     public class ScalarEncoderScalarEncoderExperimentalTestsTests
     {
 
+        /* [TestMethod]
+         [TestCategory("Prod")]
+         // <summary>
+         // Problem : Encoding the different days of week
+         // This MinVal is 0 (Sunday) and the MaxVal 6 (Saturday).
+         // The range is calculated with the formula MaxVal – MinVal = 7.
+         // The number of bits that are set to encode a single value the ‘width’ of output signal ‘W’ used for representation is 3.
+         // Total number of bits in the output ‘N’ used for representation is 8.
+         // We are choosing the value of N=9 and W = 3 to get the desired output which shifts between Monday to Sunday like shown below:
+         // So, choose the encoding parameters such that resolution addresses the problem.
+         // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+         // </summary>
+
+         [DataRow(0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 1, })] // To represent Monday.
+         [DataRow(1, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent Tuesday.
+         [DataRow(2, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent Wednesday.
+         [DataRow(3, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Thursday.
+         [DataRow(4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Friday.
+         [DataRow(5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Saturday.
+         [DataRow(6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Sunday.
+
+         public void ScalarEncoderUnitTestWeek(double input, int[] expectedResult)
+         {
+             CortexNetworkContext ctx = new CortexNetworkContext();
+             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+             {
+                 { "W", 3},
+                 { "N", 9},
+                 { "MinVal", (double)0}, // Min value = (0).
+                 { "MaxVal", (double)7}, // Max value = (7).
+                 { "Periodic", true}, // Since Monday would repeat again.
+                 { "Name", "Days Of Week"},
+                 { "ClipInput", true},
+             });
+
+             var result = encoder.Encode(input); // Encoding the input according to the encoding parameters.
+
+             //printBitMap(encoder, nameof(ScalarEncoderUnitTestWeek)); // Calling the Bitmap method to show output in Bitmap Format.
+
+             Debug.WriteLine(input);
+             Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+             Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+
+             Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+         }*/
         [TestMethod]
-        [TestCategory("Prod")]
-        // <summary>
-        // Problem : Encoding the different days of week
-        // This MinVal is 0 (Sunday) and the MaxVal 6 (Saturday).
-        // The range is calculated with the formula MaxVal – MinVal = 7.
-        // The number of bits that are set to encode a single value the ‘width’ of output signal ‘W’ used for representation is 3.
-        // Total number of bits in the output ‘N’ used for representation is 8.
-        // We are choosing the value of N=9 and W = 3 to get the desired output which shifts between Monday to Sunday like shown below:
-        // So, choose the encoding parameters such that resolution addresses the problem.
-        // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
-        // </summary>
+        [TestCategory("Months of the year")]
+
+
+        [DataRow(0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 1, })] // To represent Jan.
+        [DataRow(1, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
+        [DataRow(2, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent Mar.
+        [DataRow(3, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Apr.
+        [DataRow(4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent May.
+        [DataRow(5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent June.
+        [DataRow(6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent July.
+        [DataRow(7, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 1, })] // To represent Aug.
+        [DataRow(8, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent Sep.
+        [DataRow(9, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent Oct.
+        [DataRow(10, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Nov.
+        [DataRow(11, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Dec.
+      
+        public void ScalarEncodingOFMonths(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                 { "W", 1},
+                { "N", 9},
+                { "MinVal", (double)0}, // Min value = (0).
+                { "MaxVal", (double)12}, // Max value = (7).
+                { "Periodic", true}, // Since Monday would repeat again.
+                { "Name", "Days Of Week"},
+                { "ClipInput", true},
+            });
+
+            //for (decimal i = 0.0M; i < (long)encoder.MaxVal; i += 0.1M)
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Experiment")]
+
 
         [DataRow(0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 1, })] // To represent Monday.
         [DataRow(1, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent Tuesday.
@@ -59,13 +149,17 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Friday.
         [DataRow(5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Saturday.
         [DataRow(6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Sunday.
-
-        public void ScalarEncoderUnitTestWeek(double input, int[] expectedResult)
+        public void ScalarEncodingExperiment(double input, int[] expectedResult)
         {
-            CortexNetworkContext ctx = new CortexNetworkContext();
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
             {
-                { "W", 3},
+                 { "W", 3},
                 { "N", 9},
                 { "MinVal", (double)0}, // Min value = (0).
                 { "MaxVal", (double)7}, // Max value = (7).
@@ -74,15 +168,22 @@ namespace UnitTestsProject.EncoderTests
                 { "ClipInput", true},
             });
 
-            var result = encoder.Encode(input); // Encoding the input according to the encoding parameters.
+            //for (decimal i = 0.0M; i < (long)encoder.MaxVal; i += 0.1M)
+            {
+                var result = encoder.Encode(input);
 
-            //printBitMap(encoder, nameof(ScalarEncoderUnitTestWeek)); // Calling the Bitmap method to show output in Bitmap Format.
+                int? bucketIndex = encoder.GetBucketIndex(input);
 
-            Debug.WriteLine(input);
-            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
-            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
         }
 
 
