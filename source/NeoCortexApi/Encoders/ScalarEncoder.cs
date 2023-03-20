@@ -224,7 +224,9 @@ namespace NeoCortexApi.Encoders
                 centerbin = ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding;
             }
 
-            return centerbin - HalfWidth;
+            
+            
+           return centerbin - HalfWidth;
         }
 
 
@@ -246,7 +248,7 @@ namespace NeoCortexApi.Encoders
 
             int? bucketVal = GetFirstOnBit(input);
 
-            return bucketVal; 
+            return bucketVal;
         }
 
 

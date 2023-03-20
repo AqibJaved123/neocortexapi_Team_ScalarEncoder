@@ -33,9 +33,9 @@ namespace NeoCortexApi.Encoders
         protected int nInternal;
 
         protected double rangeInternal;
-        
+
         protected bool encLearningEnabled;
-        
+
         protected List<FieldMetaType> flattenedFieldTypeList;
 
         protected Dictionary<Dictionary<string, int>, List<FieldMetaType>> decoderFieldTypes;
@@ -132,7 +132,7 @@ namespace NeoCortexApi.Encoders
             }
         }
 
-   
+
 
         /// <summary>
         /// In real cortex mode, W must be >= 21. Empirical value.
@@ -271,7 +271,7 @@ namespace NeoCortexApi.Encoders
             Dictionary<string, int[]> sdrMap = new Dictionary<string, int[]>();
             List<string> inpVals = new List<string>();
             StringBuilder sb = new StringBuilder();
-            
+
             for (double i = this.MinVal; i < this.MaxVal; i += 1.0)
             {
                 var sdr = this.Encode(i);
@@ -281,7 +281,7 @@ namespace NeoCortexApi.Encoders
                 if (traceValues)
                 {
                     sb.AppendLine($"{i.ToString("000")} - {Helpers.StringifyVector(sdr, separator: null)}");
-                }                
+                }
             }
 
             sb.AppendLine();
@@ -320,8 +320,8 @@ namespace NeoCortexApi.Encoders
 
         public void Serialize(object obj, string name, StreamWriter sw)
         {
-            var excludeMembers = new List<string> 
-            { 
+            var excludeMembers = new List<string>
+            {
                 nameof(EncoderBase.Properties),
                 nameof(EncoderBase.halfWidth),
                 nameof(EncoderBase.rangeInternal),
