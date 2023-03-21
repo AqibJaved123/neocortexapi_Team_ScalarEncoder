@@ -89,7 +89,7 @@ namespace UnitTestsProject.EncoderTests
                 { "ClipInput", true},
             });
 
-            //for (decimal i = 0.0M; i < (long)encoder.MaxVal; i += 0.1M)
+           
             {
                 var result = encoder.Encode(input);
 
@@ -107,8 +107,68 @@ namespace UnitTestsProject.EncoderTests
             }
         }
 
+        // Unit Test # 2
+        //// <summary>
+        // Problem: Encoding the different category of people in the Company according to their ages.
+        // Let us say we have Young,  adults, Middle Age and senior People in the Company. We have to differenciate Ages based on this category.
+        // Let us choose the bracket of age as difference of 9 years.
+        // Considering Min age would be 24 year and max age 60 years.
+        // To design this problem we have to choose N and W according to the Min and Max value so that Resolution is 9.
+        // Resolution here is Range/(N-W) ; (60-24)/4 = 9.
+        // So we are encoding different category age of people in different way.
+        // We can also change the N and W with respect to Min and Max value to take a different resolution and encode the ages.
+        // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+        // </summary>
+
+        [TestMethod]
+        [TestCategory("Age category of empolyees")]
 
 
+        [DataRow(25.0, new int[] { 1, 0, 0, 0, 0, 1, 1, })] // Encoding the age 25 years.
+        [DataRow(30.0, new int[] { 1, 1, 0, 0, 0, 0, 1, })] // Encoding the age 25-30 years.
+        [DataRow(35.0, new int[] { 1, 1, 1, 0, 0, 0, 0, })] // Encoding the age 30-35 years.
+        [DataRow(40.0, new int[] { 0, 1, 1, 1, 0, 0, 0, })] // Encoding the age 35-40 years.
+        [DataRow(45.0, new int[] { 0, 0, 1, 1, 1, 0, 0, })] // Encoding the age 40-45 years.
+        [DataRow(50.0, new int[] { 0, 0, 0, 1, 1, 1, 0, })] // Encoding the age 45-50 years.
+        [DataRow(60.0, new int[] { 0, 0, 0, 0, 0, 1, 1, })] // Encoding the age 50-60 years.
+
+
+        public void ScalarEncodingOFAges(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                 { "W", 3},
+                { "N", 7},
+                { "MinVal", (double)25}, // Min value = (25).
+                { "MaxVal", (double)60}, // Max value = (60).
+                { "Periodic", false},
+                { "Name", "  Age category of empolyees"},
+                { "ClipInput", true},
+            });
+
+            
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
 
 
         [TestMethod]
