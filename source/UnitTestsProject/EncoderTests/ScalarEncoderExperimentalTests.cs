@@ -89,7 +89,7 @@ namespace UnitTestsProject.EncoderTests
                 { "ClipInput", true},
             });
 
-           
+            
             {
                 var result = encoder.Encode(input);
 
@@ -169,6 +169,67 @@ namespace UnitTestsProject.EncoderTests
                 Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
+
+        [TestMethod]
+        [TestCategory("Prod")]
+
+        // UNIT TEST NUMBER # 3
+
+        // <summary>
+        // Problem: Encoding the people participant in a Game show with unique entrance number
+        // Considering Participant have Entrance numbers from 0-10.
+        // We have to differenciate each Entrance number, so we have to choose N and W such that Resolution is 1.0 .
+        // Resolution = (Range/(N-W)); (10-0)/10;
+        // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+        // </summary>
+
+        [DataRow(1.0, new int[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 1.
+        [DataRow(2.0, new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 2.
+        [DataRow(3.0, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 3.
+        [DataRow(4.0, new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 4.
+        [DataRow(5.0, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 5. 
+        [DataRow(6.0, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 6. 
+        [DataRow(7.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, })]  // Encoding Participant having Entrance number 7.
+        [DataRow(8.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]  // Encoding Participant having Entrance number 8.
+        [DataRow(9.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, })]  // Encoding Participant having Entrance number 9.
+        [DataRow(10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })] // Encoding Participant having Entrance number 10
+        public void ScalarEncodingOFParticipatentNumber(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                 { "W",11},
+                { "N", 21 },
+                { "MinVal", (double)0},      // Min value of Entrance number.
+                { "MaxVal", (double)10},     // Max value of Entrance number.
+                { "Periodic", false},
+                { "Name", "Participant Entrance Number Range"},
+                { "ClipInput", true},
+            });
+
+
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
+
 
 
         [TestMethod]
