@@ -36,6 +36,9 @@ namespace NeoCortexApi.Encoders
         protected double rangeInternal;
         //protected double range;
         protected bool encLearningEnabled;
+
+
+        
         protected List<FieldMetaType> flattenedFieldTypeList;
 
         protected Dictionary<Dictionary<string, int>, List<FieldMetaType>> decoderFieldTypes;
@@ -133,6 +136,8 @@ namespace NeoCortexApi.Encoders
         }
 
         #region Properties
+
+
 
         /// <summary>
         /// In real cortex mode, W must be >= 21. Empirical value.
@@ -252,6 +257,95 @@ namespace NeoCortexApi.Encoders
                 }
             }
             return retVal;
+        }
+
+
+
+        /// <summary>
+        /// Returns the rendered similarity matrix for the whole rage of values between min and max.
+        /// </summary>
+        /// <param name="traceValues">True if every value should be included in the output.</param>
+        /// <returns>Formatted matrix of similariteis, betwen encoded values.</returns>
+        public string TraceSimilarities(bool traceValues = true)
+        {
+            Dictionary<string, int[]> sdrMap = new Dictionary<string, int[]>();
+            List<string> inpVals = new List<string>();
+            StringBuilder sb = new StringBuilder();
+
+            for (double i = this.MinVal; i < this.MaxVal; i += 1.0)
+            {
+                var sdr = this.Encode(i);
+                sdrMap.Add($"{i}", ArrayUtils.IndexWhere(sdr, (el) => el == 1));
+                inpVals.Add($"{i}");
+
+                if (traceValues)
+                {
+                    sb.AppendLine($"{i.ToString("000")} - {Helpers.StringifyVector(sdr, separator: null)}");
+                }
+            }
+
+            sb.AppendLine();
+
+            var similarities = MathHelpers.CalculateSimilarityMatrix(sdrMap);
+
+            var results = Helpers.RenderSimilarityMatrix(inpVals, similarities);
+
+            return sb.ToString() + results;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var encoder = obj as EncoderBase;
+            if (encoder == null)
+                return false;
+            return this.Equals(encoder);
+        }
+
+        public bool Equals(EncoderBase other)
+        {
+            if (other == null)
+                return false;
+            if (this.Properties == null)
+                return other.Properties == null;
+
+            foreach (var key in this.Properties.Keys)
+            {
+                if (other.Properties.TryGetValue(key, out var value) == false)
+                    return false;
+                if (!this[key].Equals(value))
+                    return false;
+            }
+            return true;
+        }
+
+        public void Serialize(object obj, string name, StreamWriter sw)
+        {
+            var excludeMembers = new List<string>
+            {
+                nameof(EncoderBase.Properties),
+                nameof(EncoderBase.halfWidth),
+                nameof(EncoderBase.rangeInternal),
+                nameof(EncoderBase.nInternal),
+                nameof(EncoderBase.encLearningEnabled),
+                nameof(EncoderBase.flattenedFieldTypeList),
+                nameof(EncoderBase.decoderFieldTypes),
+                nameof(EncoderBase.topDownValues),
+                nameof(EncoderBase.bucketValues),
+                nameof(EncoderBase.topDownMapping),
+
+            };
+            HtmSerializer.SerializeObject(obj, name, sw, ignoreMembers: excludeMembers);
+        }
+
+        public static object Deserialize<T>(StreamReader sr, string name)
+        {
+            var excludeMembers = new List<string> { nameof(EncoderBase.Properties) };
+            return HtmSerializer.DeserializeObject<T>(sr, name, excludeMembers);
+        }
+
+        public bool Equals(IHtmModule other)
+        {
+            return this.Equals((object)other);
         }
     }
 }

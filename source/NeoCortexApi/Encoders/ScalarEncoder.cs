@@ -236,11 +236,37 @@ namespace NeoCortexApi.Encoders
                 centerbin = ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding;
             }
 
-            return centerbin - HalfWidth;
+            
+            
+           return centerbin - HalfWidth;
         }
 
         /// <summary>
         /// The Encode
+
+        /// Gets the bucket index of the given value.
+        /// </summary>
+        /// <param name="inputData">The data to be encoded. Must be of type double.</param>
+        /// <param name="bucketIndex">The bucket index.</param>
+        /// <returns></returns>
+        /// Understanding the new method to get the bucket index.
+        /// Now Try to Implement Buckets Code While usinf Professor Hint
+        public int? GetBucketIndex(object inputData)
+        {
+            double input = Convert.ToDouble(inputData, CultureInfo.InvariantCulture);
+            if (input == double.NaN)
+            {
+                return null;
+            }
+
+            int? bucketVal = GetFirstOnBit(input);
+
+            return bucketVal;
+        }
+
+
+        /// <summary>
+        /// Encodes the given scalar value as SDR as defined by HTM.
         /// </summary>
         /// <param name="inputData">The inputData<see cref="object"/></param>
         /// <returns>The <see cref="int[]"/></returns>

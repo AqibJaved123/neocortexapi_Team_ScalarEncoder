@@ -207,6 +207,9 @@ namespace UnitTestsProject.EncoderTests
             {              
                var result = encoder.Encode(i);
 
+
+                int? bucketIndex = encoder.GetBucketIndex(i);
+
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 

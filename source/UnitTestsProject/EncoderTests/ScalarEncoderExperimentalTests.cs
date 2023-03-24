@@ -86,16 +86,315 @@ namespace UnitTestsProject.EncoderTests
 
 
         [TestMethod]
+
+        // Unit test Number# 1
         // <summary>
-        // Problem : Encoding the different days of week
-        // This MinVal is 0 (Sunday) and the MaxVal 6 (Saturday).
-        // The range is calculated with the formula MaxVal – MinVal = 7.
+        // Problem : Encoding the different Month of Year
+        // This MinVal is 0 (January) and the MaxVal 12 (December).
+        // The range is calculated with the formula MaxVal – MinVal = 12.
         // The number of bits that are set to encode a single value the ‘width’ of output signal ‘W’ used for representation is 3.
-        // Total number of bits in the output ‘N’ used for representation is 8.
-        // We are choosing the value of N=9 and W = 3 to get the desired output which shifts between Monday to Sunday like shown below:
+        // Total number of bits in the output ‘N’ used for representation is 14.
+        // We are choosing the value of N=14 and W = 3 to get the desired output which shifts between January to December like shown below:
         // So, choose the encoding parameters such that resolution addresses the problem.
         // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
         // </summary>
+
+
+        [TestMethod]
+        [TestCategory("Months of the Year")]
+
+
+        [DataRow(0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, })] // To represent Jan.
+        [DataRow(1, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
+        [DataRow(2, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Mar.
+        [DataRow(3, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Apr.
+        [DataRow(4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })] // To represent May.
+        [DataRow(5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent June.
+        [DataRow(6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent July.
+        [DataRow(7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
+        [DataRow(8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
+        [DataRow(9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
+        [DataRow(10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
+        [DataRow(11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
+
+        public void ScalarEncodingOFMonths(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                 { "W", 3},
+                { "N", 14},
+                { "MinVal", (double)0}, // Min value = (0).
+                { "MaxVal", (double)12}, // Max value = (12).
+                { "Periodic", true}, 
+                { "Name", " Month of the Year"},
+                { "ClipInput", true},
+            });
+
+            
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
+
+        // Unit Test # 2
+        //// <summary>
+        // Problem: Encoding the different category of people in the Company according to their ages.
+        // Let us say we have Young,  adults, Middle Age and senior People in the Company. We have to differenciate Ages based on this category.
+        // Let us choose the bracket of age as difference of 9 years.
+        // Considering Min age would be 24 year and max age 60 years.
+        // To design this problem we have to choose N and W according to the Min and Max value so that Resolution is 9.
+        // Resolution here is Range/(N-W) ; (60-24)/4 = 9.
+        // So we are encoding different category age of people in different way.
+        // We can also change the N and W with respect to Min and Max value to take a different resolution and encode the ages.
+        // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+        // </summary>
+
+        [TestMethod]
+        [TestCategory("Age category of empolyees")]
+
+
+        [DataRow(25.0, new int[] { 1, 0, 0, 0, 0, 1, 1, })] // Encoding the age 25 years.
+        [DataRow(30.0, new int[] { 1, 1, 0, 0, 0, 0, 1, })] // Encoding the age 25-30 years.
+        [DataRow(35.0, new int[] { 1, 1, 1, 0, 0, 0, 0, })] // Encoding the age 30-35 years.
+        [DataRow(40.0, new int[] { 0, 1, 1, 1, 0, 0, 0, })] // Encoding the age 35-40 years.
+        [DataRow(45.0, new int[] { 0, 0, 1, 1, 1, 0, 0, })] // Encoding the age 40-45 years.
+        [DataRow(50.0, new int[] { 0, 0, 0, 1, 1, 1, 0, })] // Encoding the age 45-50 years.
+        [DataRow(60.0, new int[] { 0, 0, 0, 0, 0, 1, 1, })] // Encoding the age 50-60 years.
+
+
+        public void ScalarEncodingOFAges(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                 { "W", 3},
+                { "N", 7},
+                { "MinVal", (double)25}, // Min value = (25).
+                { "MaxVal", (double)60}, // Max value = (60).
+                { "Periodic", false},
+                { "Name", "  Age category of empolyees"},
+                { "ClipInput", true},
+            });
+
+            
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Prod")]
+
+        // UNIT TEST NUMBER # 3
+
+        // <summary>
+        // Problem: Encoding the people participant in a Game show with unique entrance number
+        // Considering Participant have Entrance numbers from 0-10.
+        // We have to differenciate each Entrance number, so we have to choose N and W such that Resolution is 1.0 .
+        // Resolution = (Range/(N-W)); (10-0)/10;
+        // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+        // </summary>
+
+        [DataRow(1.0, new int[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 1.
+        [DataRow(2.0, new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 2.
+        [DataRow(3.0, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 3.
+        [DataRow(4.0, new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 4.
+        [DataRow(5.0, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 5. 
+        [DataRow(6.0, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 6. 
+        [DataRow(7.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, })]  // Encoding Participant having Entrance number 7.
+        [DataRow(8.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]  // Encoding Participant having Entrance number 8.
+        [DataRow(9.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, })]  // Encoding Participant having Entrance number 9.
+        [DataRow(10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })] // Encoding Participant having Entrance number 10
+        public void ScalarEncodingOFParticipatentNumber(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                 { "W",11},
+                { "N", 21 },
+                { "MinVal", (double)0},      // Min value of Entrance number.
+                { "MaxVal", (double)10},     // Max value of Entrance number.
+                { "Periodic", false},
+                { "Name", "Participant Entrance Number Range"},
+                { "ClipInput", true},
+            });
+
+
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Prod")]
+
+        // Unit Test Number # 4
+        // <summary>
+        // Problem: To encode the availability of Bus in a Bus station (Whole Day Schedule).
+        // Let's assume that train will be available every 30 minutes.
+        // Firstly 24 hours clock is converted into minutes which will be equal to 1440 minutes.
+        // Start of the day will be the minimum value which is 0 and end of the day will be the maximum value which is 1440.
+        // At the beginning of next day clock resets and it will again start from 0, hence it is a periodic process and the same routine continues every day.
+        // The values of parameters 'N' and 'W' should be selected in such a way that we get a resolution of 30.0 .
+        // Resolution for this scenario = 1440/48 = 30.0 .
+        // After encoding we can see the shift after every 60 minutes.
+        // Time interval between adjacent trains can be changed by altering the values of 'N' and 'W' for the known min and max value.
+        // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+        // </summary>
+
+        [DataRow(100, new int[] { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]
+        [DataRow(200, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]
+        [DataRow(300, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(400, new int[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(500, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(600, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(700, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(800, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, })]
+        [DataRow(900, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, })]
+        [DataRow(1000, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]
+        [DataRow(1100, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]
+        [DataRow(1200, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]
+        [DataRow(1300, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, })]
+        [DataRow(1400, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]
+        public void ScalarEncodingOFBusStationSchedule(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 11},
+                { "N", 24},
+                { "MinVal", (double)0.0},
+                { "MaxVal", (double)1440.0},
+                { "Periodic", true},
+                { "Name", "Bus station Schedule"},
+                { "ClipInput", true},
+            });
+
+
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
+
+        [TestMethod]
+         [TestCategory("Prod")]
+         // <summary>
+         // Problem : Encoding the different days of week
+         // This MinVal is 0 (Sunday) and the MaxVal 6 (Saturday).
+         // The range is calculated with the formula MaxVal – MinVal = 7.
+         // The number of bits that are set to encode a single value the ‘width’ of output signal ‘W’ used for representation is 3.
+         // Total number of bits in the output ‘N’ used for representation is 8.
+         // We are choosing the value of N=9 and W = 3 to get the desired output which shifts between Monday to Sunday like shown below:
+         // So, choose the encoding parameters such that resolution addresses the problem.
+         // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+         // </summary>
+
+         [DataRow(0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 1, })] // To represent Monday.
+         [DataRow(1, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent Tuesday.
+         [DataRow(2, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent Wednesday.
+         [DataRow(3, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Thursday.
+         [DataRow(4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Friday.
+         [DataRow(5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Saturday.
+         [DataRow(6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Sunday.
+
+         public void ScalarEncoderUnitTestWeek(double input, int[] expectedResult)
+         {
+             CortexNetworkContext ctx = new CortexNetworkContext();
+             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+             {
+                 { "W", 3},
+                 { "N", 9},
+                 { "MinVal", (double)0}, // Min value = (0).
+                 { "MaxVal", (double)7}, // Max value = (7).
+                 { "Periodic", true}, // Since Monday would repeat again.
+                 { "Name", "Days Of Week"},
+                 { "ClipInput", true},
+             });
+
+             var result = encoder.Encode(input); // Encoding the input according to the encoding parameters.
+
+             //printBitMap(encoder, nameof(ScalarEncoderUnitTestWeek)); // Calling the Bitmap method to show output in Bitmap Format.
+
+             Debug.WriteLine(input);
+             Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+             Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+
+             Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+         }
+        
+
+        [TestMethod]
+        [TestCategory("Experiment")]
+
 
         [DataRow(0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 1, })] // To represent Monday.
         [DataRow(1, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent Tuesday.
@@ -104,13 +403,17 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Friday.
         [DataRow(5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Saturday.
         [DataRow(6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Sunday.
-
-        public void ScalarEncoderUnitTestWeek(double input, int[] expectedResult)
+        public void ScalarEncodingExperiment(double input, int[] expectedResult)
         {
-            CortexNetworkContext ctx = new CortexNetworkContext();
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
             {
-                { "W", 3},
+                 { "W", 3},
                 { "N", 9},
                 { "MinVal", (double)0}, // Min value = (0).
                 { "MaxVal", (double)7}, // Max value = (7).
@@ -119,15 +422,24 @@ namespace UnitTestsProject.EncoderTests
                 { "ClipInput", true},
             });
 
-            var result = encoder.Encode(input); // Encoding the input according to the encoding parameters.
+            //for (decimal i = 0.0M; i < (long)encoder.MaxVal; i += 0.1M)
+            {
+                var result = encoder.Encode(input);
 
             printBitMap(encoder, nameof(ScalarEncoderUnitTestWeek)); // Calling the Bitmap method to show output in Bitmap Format.
 
-            Debug.WriteLine(input);
-            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
-            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                int? bucketIndex = encoder.GetBucketIndex(input);
 
-            Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
         }
 
 
