@@ -230,7 +230,73 @@ namespace UnitTestsProject.EncoderTests
             }
         }
 
+        [TestMethod]
+        [TestCategory("Prod")]
 
+        // Unit Test Number # 4
+        // <summary>
+        // Problem: To encode the availability of Bus in a Bus station (Whole Day Schedule).
+        // Let's assume that train will be available every 30 minutes.
+        // Firstly 24 hours clock is converted into minutes which will be equal to 1440 minutes.
+        // Start of the day will be the minimum value which is 0 and end of the day will be the maximum value which is 1440.
+        // At the beginning of next day clock resets and it will again start from 0, hence it is a periodic process and the same routine continues every day.
+        // The values of parameters 'N' and 'W' should be selected in such a way that we get a resolution of 30.0 .
+        // Resolution for this scenario = 1440/48 = 30.0 .
+        // After encoding we can see the shift after every 60 minutes.
+        // Time interval between adjacent trains can be changed by altering the values of 'N' and 'W' for the known min and max value.
+        // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
+        // </summary>
+
+        [DataRow(100, new int[] { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]
+        [DataRow(200, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]
+        [DataRow(300, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(400, new int[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(500, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(600, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(700, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(800, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, })]
+        [DataRow(900, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, })]
+        [DataRow(1000, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]
+        [DataRow(1100, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]
+        [DataRow(1200, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]
+        [DataRow(1300, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, })]
+        [DataRow(1400, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]
+        public void ScalarEncodingOFBusStationSchedule(double input, int[] expectedResult)
+        {
+            string outFolder = nameof(ScalarEncodingExperiment);
+
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 11},
+                { "N", 24},
+                { "MinVal", (double)0.0},
+                { "MaxVal", (double)1440.0},
+                { "Periodic", true},
+                { "Name", "Bus station Schedule"},
+                { "ClipInput", true},
+            });
+
+
+            {
+                var result = encoder.Encode(input);
+
+                int? bucketIndex = encoder.GetBucketIndex(input);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"v:{input} /b:{bucketIndex}");
+                Debug.WriteLine(input);
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+
+                Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+                Assert.IsTrue(expectedResult.SequenceEqual(result)); // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+            }
+        }
 
         [TestMethod]
          [TestCategory("Prod")]
