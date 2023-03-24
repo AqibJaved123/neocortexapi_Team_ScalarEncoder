@@ -137,7 +137,7 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(60.0, new int[] { 0, 0, 0, 0, 0, 1, 1, })] // Encoding the age 50-60 years.
 
 
-        public void ScalarEncodingOFAges(double input, int[] expectedResult)
+        public void ScalarEncodingOFAgeCategories(double input, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
