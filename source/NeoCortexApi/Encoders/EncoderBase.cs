@@ -1,23 +1,25 @@
 ﻿// Copyright (c) Damir Dobric. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using NeoCortexApi.Entities;
-using NeoCortexApi.Utility;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace NeoCortexApi.Encoders
 {
     /// <summary>
     /// Base class for all encoders.
     /// </summary> 
-    public abstract class EncoderBase : IHtmModule, ISerializable
+    public abstract class EncoderBase : IHtmModule
     {
         /// <summary>
         /// List of all encoder properties.
         /// </summary>
         protected Dictionary<string, object> Properties = new Dictionary<string, object>();
+
+
+        /** Value used to represent no data */
+        //public static readonly double SENTINEL_VALUE_FOR_MISSING_DATA = Double.NaN;
+        //protected List<Tuple<string, int>> description = new List<Tuple<string, int>>();   
 
         /// <summary>
         /// number of bits in the representation (must be >= w) 
@@ -31,11 +33,12 @@ namespace NeoCortexApi.Encoders
 
 
         protected int nInternal;
-
         protected double rangeInternal;
-
+        //protected double range;
         protected bool encLearningEnabled;
 
+
+        
         protected List<FieldMetaType> flattenedFieldTypeList;
 
         protected Dictionary<Dictionary<string, int>, List<FieldMetaType>> decoderFieldTypes;
@@ -84,7 +87,7 @@ namespace NeoCortexApi.Encoders
                 IsRealCortexModel = false;
                 N = 0;
                 Resolution = -1.0;
-                Radius = -1.0;
+                Radius = - 1.0;
                 Periodic = false;
                 ClipInput = false;
 
@@ -132,12 +135,14 @@ namespace NeoCortexApi.Encoders
             }
         }
 
+        #region Properties
+
 
 
         /// <summary>
         /// In real cortex mode, W must be >= 21. Empirical value.
         /// </summary>
-        public bool IsRealCortexModel { get => (bool)this["IsRealCortexModel"]; set => this["IsRealCortexModel"] = (bool)value; }
+        public bool IsRealCortexModel { get => (bool)this["IsRealCortexModel"]; set => this["IsRealCortexModel"] = (bool)value; } 
 
         /// <summary>
         /// The width of output vector of encoder. 
@@ -147,7 +152,7 @@ namespace NeoCortexApi.Encoders
         public int N { get => (int)this["N"]; set => this["N"] = (int)value; }
 
         public int NInternal { get => (int)this["NInternal"]; set => this["NInternal"] = (int)value; }
-
+                
         /// <summary>
         /// Number of bits set on one, which represents single encoded value.
         /// </summary>
@@ -173,7 +178,6 @@ namespace NeoCortexApi.Encoders
         /// It cats bits at the beginning with negative position and at th eend after last bit.
         /// This happens only if Periodic is set on false.
         /// </summary>
-        /// Analyze the code
         public bool ClipInput { get => (bool)this["ClipInput"]; set => this["ClipInput"] = (bool)value; }
 
         public int Padding { get => (int)this["Padding"]; set => this["Padding"] = value; }
@@ -184,7 +188,9 @@ namespace NeoCortexApi.Encoders
 
         public string Name { get => (string)this["Name"]; set => this["Name"] = value; }
 
-        public int Offset { get => (int)this["Offset"]; set => this["Offset"] = value; }
+        public int Offset{ get => (int)this["Offset"]; set => this["Offset"] = value; }
+
+        #endregion
 
 
         public double RangeInternal { get => rangeInternal; set => this.rangeInternal = value; }
@@ -216,17 +222,10 @@ namespace NeoCortexApi.Encoders
         /// </remarks>
         public abstract int[] Encode(object inputData);
 
-        /// <summary>
-        /// The Encode
-        /// </summary>
-        /// <param name="inputData">The inputData<see cref="object"/></param>
-        /// <returns>The <see cref="int[]"/></returns>
-        //public abstract int[] Encode(object inputData);
-
         public IModuleData Compute(int[] input, bool learn)
         {
             var result = Encode(input);
-
+            //return new NeoCortexApiInArrawyOutput(result);
             return null;
         }
 
@@ -251,7 +250,7 @@ namespace NeoCortexApi.Encoders
             int[] retVal = new int[matrix.GetMaxIndex() + 1];
             for (int i = 0; i < retVal.Length; i++)
             {
-                int[] slice = matrix.GetObject(i);
+                int[] slice = matrix.getObject(i);
                 for (int j = 0; j < slice.Length; j++)
                 {
                     retVal[i] += (slice[j] * encoded[j]);
@@ -259,6 +258,7 @@ namespace NeoCortexApi.Encoders
             }
             return retVal;
         }
+
 
 
         /// <summary>

@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Damir Dobric. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-using NeoCortexApi.Entities;
+using NeoCortexApi.Encoders;
 using NeoCortexApi.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 
 namespace NeoCortexApi.Encoders
 {
@@ -26,6 +25,26 @@ namespace NeoCortexApi.Encoders
         /// Gets the Width
         /// </summary>
         public override int Width => throw new NotImplementedException();
+
+        /// <summary>
+        /// Defines the NoOfBits. Works same as N. It is used to change Type of a variable
+        /// </summary>
+        private double NoOfBits;
+
+        /// <summary>
+        /// Defines the Starting point in an array to map active bits
+        /// </summary>
+        private double StartPoint;
+
+        /// <summary>
+        /// Defines the EndingPoint in an array where active bits ends
+        /// </summary>
+        private double EndingPoint;
+
+        /// <summary>
+        /// Defines the EndingPointForPeriodic
+        /// </summary>
+        private double EndingPointForPeriodic;// Ending point in an array where active bits ends only works for periodic data
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScalarEncoderExperimental"/> class.
@@ -75,7 +94,7 @@ namespace NeoCortexApi.Encoders
             // each case here.
             InitEncoder(W, MinVal, MaxVal, N, Radius, Resolution);
 
-            //nInternal represents the output _area excluding the possible padding on each side
+            //nInternal represents the output area excluding the possible padding on each side
             NInternal = N - 2 * Padding;
 
             if (Name == null)
@@ -160,13 +179,6 @@ namespace NeoCortexApi.Encoders
             }
         }
 
-
-        /// <summary>
-        /// Gets the index of the first non-zero bit.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns>Null in a case of an error.</returns>
-        /// <exception cref="ArgumentException"></exception>
         protected int? GetFirstOnBit(double input)
         {
             if (input == double.NaN)
@@ -178,9 +190,9 @@ namespace NeoCortexApi.Encoders
                 if (input < MinVal)
                 {
                     if (ClipInput && !Periodic)
-                    {
+                    {                        
                         Debug.WriteLine("Clipped input " + Name + "=" + input + " to minval " + MinVal);
-
+                        
                         input = MinVal;
                     }
                     else
@@ -203,8 +215,8 @@ namespace NeoCortexApi.Encoders
                 {
                     if (ClipInput)
                     {
-
-                        Debug.WriteLine($"Clipped input {Name} = {input} to maxval MaxVal");
+                        
+                        Debug.WriteLine($"Clipped input {Name} = {input} to maxval MaxVal");                        
                         input = MaxVal;
                     }
                     else
@@ -229,8 +241,9 @@ namespace NeoCortexApi.Encoders
            return centerbin - HalfWidth;
         }
 
-
         /// <summary>
+        /// The Encode
+
         /// Gets the bucket index of the given value.
         /// </summary>
         /// <param name="inputData">The data to be encoded. Must be of type double.</param>
@@ -296,10 +309,21 @@ namespace NeoCortexApi.Encoders
                 ArrayUtils.SetIndexesTo(output, ArrayUtils.Range(minbin, maxbin + 1), 1);
             }
 
+            // Added guard against immense string concatenation
+            //if (LOGGER.isTraceEnabled())
+            //{
+            //    LOGGER.trace("");
+            //    LOGGER.trace("input: " + input);
+            //    LOGGER.trace("range: " + getMinVal() + " - " + getMaxVal());
+            //    LOGGER.trace("n:" + getN() + "w:" + getW() + "resolution:" + getResolution() +
+            //                    "radius:" + getRadius() + "periodic:" + isPeriodic());
+            //    LOGGER.trace("output: " + Arrays.toString(output));
+            //    LOGGER.trace("input desc: " + decode(output, ""));
+            //}
+
             // Output 1-D array of same length resulted in parameter N    
             return output;
         }
-
 
         /// <summary>
         /// This method enables running in the network.
@@ -321,11 +345,5 @@ namespace NeoCortexApi.Encoders
         {
             throw new NotImplementedException();
         }
-
-        //public static object Deserialize<T>(StreamReader sr, string name)
-        //{
-        //    var excludeMembers = new List<string> { nameof(ScalarEncoder.Properties) };
-        //    return HtmSerializer2.DeserializeObject<T>(sr, name, excludeMembers);
-        //}
     }
 }
