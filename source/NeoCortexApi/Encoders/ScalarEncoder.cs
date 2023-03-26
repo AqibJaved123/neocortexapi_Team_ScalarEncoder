@@ -52,7 +52,7 @@ namespace NeoCortexApi.Encoders
             {
                 throw new ArgumentException("W must be an odd number (to eliminate centering difficulty)");
             }
-
+            
             HalfWidth = (W - 1) / 2;
 
             // For non-periodic inputs, padding is the number of bits "outside" the range,
