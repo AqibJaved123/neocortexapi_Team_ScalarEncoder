@@ -153,12 +153,62 @@ namespace UnitTestsProject.EncoderTests
 
         // Total buckets  = 14-3+1 = 12
         // ith bucket= floor(TotalBuckets*(Value-minValue)/Range)
+<<<<<<< HEAD
         // where TotalBuckets=12, minValue=0, and Range=11, 
         //we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
+=======
+        /* where TotalBuckets=12, minValue=0, and Range=11, we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
+
+For Value = 0:
+ithbucket = floor(12*(0-0)/11) = floor(0) = 0
+
+For Value = 1:
+ithbucket = floor(12*(1-0)/11) = floor(1.09) = 1
+
+For Value = 2:
+ithbucket = floor(12*(2-0)/11) = floor(2.18) = 2
+
+For Value = 3:
+ithbucket = floor(12*(3-0)/11) = floor(3.27) = 3
+
+For Value = 4:
+ithbucket = floor(12*(4-0)/11) = floor(4.36) = 4
+
+For Value = 5:
+ithbucket = floor(12*(5-0)/11) = floor(5.45) = 5
+
+For Value = 6:
+ithbucket = floor(12*(6-0)/11) = floor(6.55) = 6
+
+For Value = 7:
+ithbucket = floor(12*(7-0)/11) = floor(7.64) = 7
+
+For Value = 8:
+ithbucket = floor(12*(8-0)/11) = floor(8.73) = 8
+
+For Value = 9:
+ithbucket = floor(12*(9-0)/11) = floor(9.82) = 9
+
+For Value = 10:
+ithbucket = floor(12*(10-0)/11) = floor(10.91) = 10
+
+For Value = 11:
+ithbucket = floor(12*(11-0)/11) = floor(12) = 11
+
+Therefore, the ith bucket for values 0 to 11 using the given formula would be:
+
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+
+
+
+
+R  */
+>>>>>>> 76cf01ea136b0d97a1e84bfd83b01dfc0d4185fd
         [TestMethod]
         [TestCategory("Months of the Year")]
 
 
+<<<<<<< HEAD
         [DataRow(0, 0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
         [DataRow(1, 1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
         [DataRow(2, 2, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Mar.
@@ -171,6 +221,20 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
         [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
         [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
+=======
+        [DataRow(0,0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
+        [DataRow(1,1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
+        [DataRow(2,2, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Mar.
+        [DataRow(3,3, new int[] { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Apr.
+        [DataRow(4,4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })] // To represent May.
+        [DataRow(5,5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent June.
+        [DataRow(6,6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent July.
+       // [DataRow(7,7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
+      //  [DataRow(8,8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
+       // [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
+    //    [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
+       // [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
+>>>>>>> 76cf01ea136b0d97a1e84bfd83b01dfc0d4185fd
 
         public void ScalarEncodingOFMonths(double input, double bucket, int[] expectedResult)
         {
@@ -185,8 +249,13 @@ namespace UnitTestsProject.EncoderTests
                  { "W", 3},
                 { "N", 14},
                 { "MinVal", (double)0}, // Min value = (0).
+<<<<<<< HEAD
                 { "MaxVal", (double)11}, // Max value = (11).
                 { "Periodic", false},
+=======
+                { "MaxVal", (double)12}, // Max value = (12).
+                { "Periodic", false}, 
+>>>>>>> 76cf01ea136b0d97a1e84bfd83b01dfc0d4185fd
                 { "Name", " Month of the Year"},
                 { "ClipInput", true},
             });
