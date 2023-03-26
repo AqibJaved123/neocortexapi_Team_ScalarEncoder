@@ -153,10 +153,9 @@ namespace UnitTestsProject.EncoderTests
 
         // Total buckets  = 14-3+1 = 12
         // ith bucket= floor(TotalBuckets*(Value-minValue)/Range)
-<<<<<<< HEAD
+
         // where TotalBuckets=12, minValue=0, and Range=11, 
         //we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
-=======
         /* where TotalBuckets=12, minValue=0, and Range=11, we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
 
 For Value = 0:
@@ -203,12 +202,8 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
 
 R  */
->>>>>>> 76cf01ea136b0d97a1e84bfd83b01dfc0d4185fd
         [TestMethod]
         [TestCategory("Months of the Year")]
-
-
-<<<<<<< HEAD
         [DataRow(0, 0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
         [DataRow(1, 1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
         [DataRow(2, 2, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Mar.
@@ -221,7 +216,6 @@ R  */
         [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
         [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
         [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
-=======
         [DataRow(0,0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
         [DataRow(1,1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
         [DataRow(2,2, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Mar.
@@ -234,7 +228,6 @@ R  */
        // [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
     //    [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
        // [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
->>>>>>> 76cf01ea136b0d97a1e84bfd83b01dfc0d4185fd
 
         public void ScalarEncodingOFMonths(double input, double bucket, int[] expectedResult)
         {
@@ -249,13 +242,12 @@ R  */
                  { "W", 3},
                 { "N", 14},
                 { "MinVal", (double)0}, // Min value = (0).
-<<<<<<< HEAD
+
                 { "MaxVal", (double)11}, // Max value = (11).
                 { "Periodic", false},
-=======
+
                 { "MaxVal", (double)12}, // Max value = (12).
                 { "Periodic", false}, 
->>>>>>> 76cf01ea136b0d97a1e84bfd83b01dfc0d4185fd
                 { "Name", " Month of the Year"},
                 { "ClipInput", true},
             });
