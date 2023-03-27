@@ -82,13 +82,6 @@ namespace UnitTestsProject.EncoderTests
         //bucket_index = centerbin - HalfWidth
         // </summary>
         [DataRow(0, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        //  [DataRow(1, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        //  [DataRow(2, 1, new int[] { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        [DataRow(3, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        [DataRow(4, 3, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        [DataRow(5, 4, new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        // [DataRow(6, 4, new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-
         [DataRow(1, 1, new int[] { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
         [DataRow(2, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
         [DataRow(3, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
@@ -103,13 +96,6 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(12, 9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, })]
         [DataRow(13, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, })]
         [DataRow(14, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, })]
-        // [DataRow(15, 12, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, })]
-        [DataRow(16, 12, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, })]
-        [DataRow(17, 13, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, })]
-        [DataRow(18, 14, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, })]
-        // [DataRow(19, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
-        // [DataRow(20, 16, new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]
-
         [DataRow(15, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, })]
         [DataRow(16, 12, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, })]
         [DataRow(17, 13, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, })]
@@ -204,9 +190,9 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(-1, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
 
 
-        public void ScalarEncoderWithBucketUintTestDecimalValues(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketUintTestNegativeValues(double input, double bucket, int[] expectedResult)
         {
-            string outFolder = nameof(ScalarEncoderWithBucketUintTestDecimalValues);
+            string outFolder = nameof(ScalarEncoderWithBucketUintTestNegativeValues);
             Directory.CreateDirectory(outFolder);
             DateTime now = DateTime.Now;
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
@@ -383,6 +369,153 @@ namespace UnitTestsProject.EncoderTests
         // Unit Test D Ends here
 
 
+        // Unit Test E Starts here
+        [TestMethod]
+        [TestCategory("Prod")]
+        // <summary>
+        //This unit test verifies the Scalar Encoder with buckets' behavior when clipInput is set to true instead
+        //of false.When clipInput is true, input values outside of the specified range will be encoded to the maximum
+        //or minimum input value.For example, values lower than minVal will encode to the first bucket (or lower value),
+        //and values greater than maxVal will encode to the last bucket (or max value).
+        //This test case uses various numeric inputs that are outside the range of minVal and maxVal, and verifies the
+        //correct encoding of these inputs. This test has has a minimum value of 0, maximum value of 20, and width of 5.
+        // </summary>
+
+        [DataRow(0, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(-100, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(200, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
+        [DataRow(35, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
+        [DataRow(-100, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(-2500, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(3500, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
+        [DataRow(20.5, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
+        [DataRow(-0.5, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+
+
+        public void ScalarEncoderWithBucketClipInputUnitTest(double input, int bucket, int[] expectedResult)
+        {
+
+
+            string outFolder = nameof(ScalarEncoderWithBucketClipInputUnitTest);
+            Directory.CreateDirectory(outFolder);
+            DateTime now = DateTime.Now;
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 5},
+                { "N", 20}, 
+                { "MinVal", (double)0}, // Min value = (0).
+                { "MaxVal", (double)20}, // Max value = (20).
+                { "Periodic", false },
+                { "Name", "Basic"},
+                { "ClipInput", true},  //For Clipping values outside the range
+            });
+
+            var result = encoder.Encode(input);
+
+            int? bucketIndex = encoder.GetBucketIndex(input);
+
+            int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+            var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+            // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"value:{input} /bucket:{bucketIndex}");
+            Debug.WriteLine(input);
+            Debug.WriteLine(bucket);
+            Debug.WriteLine(bucketIndex);
+            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+
+
+            Assert.IsTrue(expectedResult.SequenceEqual(result) && bucket == bucketIndex); // Assert.IsTrue is used to check whether the given input result and bucket matches with the expected result and expected bucket.
+
+
+        }
+
+        // Unit Test E Ends here
+
+        // Unit Test F Starts here
+        [TestMethod]
+        [TestCategory("Prod")]
+        // <summary>
+        // This unit test validates the functionality of the Scalar Encoder with buckets with periodic setting.
+        // The test includes the first twenty numeric values from 0 to 20. The updated encoder (Scalar Encoder with buckets)
+        // encodes these values with buckets using the formulas of periodic input. The unit test takes  numeric values,
+        // their encoded form, and the corresponding bucket number. In this case, the minimum value is 0, maximum value
+        // is 20, width is 5, and range is 20. Total bucket can be calculated by using the formula b = n - w + 1, which
+        // is 16 (b = 20 - 5 + 1). For example, if we want to encode value 10, its encoded form is { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, } and its mapping bucket is 8, which can
+        // be calculated by using the following formulas:
+        // Padding = 0
+        // Resolution = Range / N
+        // NInternal = N - 2 * Padding;
+        // x = floor((input - MinVal) * NInternal / Range + Padding)
+        // HalfWidth = (W - 1) / 2
+        // bucket_index  = centerbin - HalfWidth
+        // </summary>
+        [DataRow(0, -2, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]
+        [DataRow(1, -1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, })]
+        [DataRow(2, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(3, 1, new int[] { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(4, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(5, 3, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(6, 4, new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(7, 5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(8, 6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(9, 7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(10, 8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(11, 9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, })]
+        [DataRow(12, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, })]
+        [DataRow(13, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, })]
+        [DataRow(14, 12, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, })]
+        [DataRow(15, 13, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, })]
+        [DataRow(16, 14, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, })]
+        [DataRow(17, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
+        [DataRow(18, 16, new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]
+        [DataRow(19, 17, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })]
+        //[DataRow(20, 18, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]
+
+        public void ScalarEncoderWithBucketPeriodicUnitTest(double input, double bucket, int[] expectedResult)
+        {
+
+
+            string outFolder = nameof(ScalarEncoderWithBucketPeriodicUnitTest);
+            Directory.CreateDirectory(outFolder);
+            DateTime now = DateTime.Now;
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 5},
+                { "N", 20},
+                { "MinVal", (double)0}, // Min value = (0).
+                { "MaxVal", (double)20}, // Max value = (20).
+                { "Periodic", true },
+                { "Name", "Basic"},
+                { "ClipInput", false},
+            });
+
+            var result = encoder.Encode(input);
+
+            int? bucketIndex = encoder.GetBucketIndex(input);
+
+            int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+            var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+            // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"value:{input} /bucket:{bucketIndex}");
+
+
+            Debug.WriteLine(input);
+            Debug.WriteLine(bucket);
+            Debug.WriteLine(bucketIndex);
+            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+            Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+
+
+            Assert.IsTrue(expectedResult.SequenceEqual(result) && bucket == bucketIndex); // Assert.IsTrue is used to check whether the given input result and bucket matches with the expected result and expected bucket.
+
+
+        }
+
+        // Unit Test F Ends here
+
+
+
 
 
 
@@ -401,7 +534,7 @@ namespace UnitTestsProject.EncoderTests
         // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
         // </summary>
         // Total buckets  = 14-3+1 = 12
- Aqib_Javed
+
         // b=N-W+1
         // where TotalBuckets=5, minValue=0, and Range=11, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
@@ -459,8 +592,8 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
   */
 
-R  */
- 
+
+
         [TestMethod]
         [TestCategory("Months of the Year")]
 
