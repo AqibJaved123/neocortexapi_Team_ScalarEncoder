@@ -81,14 +81,7 @@ namespace UnitTestsProject.EncoderTests
 
         //bucket_index = centerbin - HalfWidth
         // </summary>
-        [DataRow(0, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        //  [DataRow(1, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        //  [DataRow(2, 1, new int[] { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        [DataRow(3, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        [DataRow(4, 3, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        [DataRow(5, 4, new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-        // [DataRow(6, 4, new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
-
+      
         [DataRow(1, 1, new int[] { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
         [DataRow(2, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
         [DataRow(3, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
@@ -103,13 +96,6 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(12, 9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, })]
         [DataRow(13, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, })]
         [DataRow(14, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, })]
-        // [DataRow(15, 12, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, })]
-        [DataRow(16, 12, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, })]
-        [DataRow(17, 13, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, })]
-        [DataRow(18, 14, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, })]
-        // [DataRow(19, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
-        // [DataRow(20, 16, new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]
-
         [DataRow(15, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, })]
         [DataRow(16, 12, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, })]
         [DataRow(17, 13, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, })]
@@ -388,7 +374,6 @@ namespace UnitTestsProject.EncoderTests
 
 
 
-
         // Unit test Number# 1
         // <summary>
         // Problem : Encoding the different Month of Year
@@ -401,66 +386,11 @@ namespace UnitTestsProject.EncoderTests
         // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
         // </summary>
         // Total buckets  = 14-3+1 = 12
- Aqib_Javed
         // b=N-W+1
         // where TotalBuckets=5, minValue=0, and Range=11, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
         //x = centerbin - HalfWidth   
 
-
-        // ith bucket= floor(TotalBuckets*(Value-minValue)/Range)
-        // where TotalBuckets=12, minValue=0, and Range=11, 
-        //we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
-
-        /* where TotalBuckets=12, minValue=0, and Range=11, we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
-
-For Value = 0:
-ithbucket = floor(12*(0-0)/11) = floor(0) = 0
-
-For Value = 1:
-ithbucket = floor(12*(1-0)/11) = floor(1.09) = 1
-
-For Value = 2:
-ithbucket = floor(12*(2-0)/11) = floor(2.18) = 2
-
-For Value = 3:
-ithbucket = floor(12*(3-0)/11) = floor(3.27) = 3
-
-For Value = 4:
-ithbucket = floor(12*(4-0)/11) = floor(4.36) = 4
-
-For Value = 5:
-ithbucket = floor(12*(5-0)/11) = floor(5.45) = 5
-
-For Value = 6:
-ithbucket = floor(12*(6-0)/11) = floor(6.55) = 6
-
-For Value = 7:
-ithbucket = floor(12*(7-0)/11) = floor(7.64) = 7
-
-For Value = 8:
-ithbucket = floor(12*(8-0)/11) = floor(8.73) = 8
-
-For Value = 9:
-ithbucket = floor(12*(9-0)/11) = floor(9.82) = 9
-
-For Value = 10:
-ithbucket = floor(12*(10-0)/11) = floor(10.91) = 10
-
-For Value = 11:
-ithbucket = floor(12*(11-0)/11) = floor(12) = 11
-
-Therefore, the ith bucket for values 0 to 11 using the given formula would be:
-
-0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-
-
-
-
-  */
-
-R  */
- 
         [TestMethod]
         [TestCategory("Months of the Year")]
 
@@ -478,32 +408,7 @@ R  */
         [DataRow(10, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
         [DataRow(11, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
 
-        [DataRow(7,7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
-        [DataRow(8,8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
-        [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
-        [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
-        [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
-
-        [DataRow(0,0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
-        [DataRow(1,1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
-        [DataRow(2,2, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Mar.
-        [DataRow(3,3, new int[] { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Apr.
-        [DataRow(4,4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })] // To represent May.
-        [DataRow(5,5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent June.
-        [DataRow(6,6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent July.
-        [DataRow(7,7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
-        [DataRow(8,8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
-        [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
-        [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
-        [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
-
-       // [DataRow(7,7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
-      //  [DataRow(8,8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
-       // [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
-    //    [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
-       // [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
-
-        public void ScalarEncodingOFMonths(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketMonthOfYear(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -514,22 +419,10 @@ R  */
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
             {
                  { "W", 3},
-                { "N", 10},
-                { "MinVal", (double)0}, // Min value = (0).
-                { "MaxVal", (double)11}, // Max value = (11).
-                { "Periodic", false},
-
-                { "W", 3},
                 { "N", 14},
                 { "MinVal", (double)0}, // Min value = (0).
-                { "MaxVal", (double)11}, // Max value = (12).
-
- 
                 { "MaxVal", (double)11}, // Max value = (11).
                 { "Periodic", false},
-
-                { "MaxVal", (double)12}, // Max value = (12).
-                { "Periodic", false}, 
                 { "Name", " Month of the Year"},
                 { "ClipInput", true},
             });
@@ -544,7 +437,7 @@ R  */
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+                //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
                 Debug.WriteLine(input);
                 Debug.WriteLine(bucket);
@@ -596,7 +489,7 @@ R  */
         [DataRow(1200, 15.0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]
         [DataRow(1350, 17.0, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]
         [DataRow(1400, 18.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]
-        public void ScalarBusStationschedule(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketBusStationschedule(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -669,7 +562,7 @@ R  */
         [DataRow(85.0, 9.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, })]  // Encoding Participant having Entrance number 3.
         [DataRow(96.0, 10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]  // Encoding Participant having Entrance number 9.
 
-        public void ScalarParticipatentNumber(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketTicketNumber(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -698,7 +591,7 @@ R  */
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-               // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+                // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
                 Debug.WriteLine(input);
@@ -744,7 +637,7 @@ R  */
         [DataRow(58.0, 4.0, new int[] { 0, 0, 0, 0, 1, 1, 1, })] // Encoding the age 50-60 years.
 
 
-        public void ScalarAgeCategories(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketAgeCategories(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -773,7 +666,7 @@ R  */
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-                //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+                // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
 
@@ -790,12 +683,12 @@ R  */
             }
         }
 
-        
+
 
 
         // Unit test number # 5
         // <summary>
-        // Problem: Encoding the Temperature range in Music Show.
+        // Problem: Encoding the Temperature range in Category and their effects.
         // Considering  have Temperature Range from -10.0-100 celsius.
         // 
         // Calculate the bit width: The bit width is the range of values represented by each bit.
@@ -827,7 +720,7 @@ R  */
         [DataRow(98.0, 14.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]   //Temperature range (90-100)
 
 
-        public void ScalarTemperatureRangeinConcert(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketTemperatureRanges(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -856,7 +749,7 @@ R  */
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"value:{input} /bucket:{bucketIndex}");
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
                 Debug.WriteLine(input);
@@ -871,7 +764,6 @@ R  */
                 // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
-
 
         [TestMethod]
         [TestCategory("Prod")]
