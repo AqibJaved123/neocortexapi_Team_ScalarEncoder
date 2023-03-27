@@ -81,6 +81,8 @@ namespace UnitTestsProject.EncoderTests
 
         //bucket_index = centerbin - HalfWidth
         // </summary>
+      
+
         [DataRow(0, 0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
         [DataRow(1, 1, new int[] { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
         [DataRow(2, 2, new int[] { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]
@@ -521,7 +523,6 @@ namespace UnitTestsProject.EncoderTests
 
 
 
-
         // Unit test Number# 1
         // <summary>
         // Problem : Encoding the different Month of Year
@@ -535,10 +536,13 @@ namespace UnitTestsProject.EncoderTests
         // </summary>
         // Total buckets  = 14-3+1 = 12
 
+
         // b=N-W+1
         // where TotalBuckets=5, minValue=0, and Range=11, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
         //x = centerbin - HalfWidth   
+
+ 
 
 
         // ith bucket= floor(TotalBuckets*(Value-minValue)/Range)
@@ -611,32 +615,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(10, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
         [DataRow(11, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
 
-        [DataRow(7,7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
-        [DataRow(8,8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
-        [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
-        [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
-        [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
-
-        [DataRow(0,0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
-        [DataRow(1,1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
-        [DataRow(2,2, new int[] { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Mar.
-        [DataRow(3,3, new int[] { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Apr.
-        [DataRow(4,4, new int[] { 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })] // To represent May.
-        [DataRow(5,5, new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, })] // To represent June.
-        [DataRow(6,6, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, })] // To represent July.
-        [DataRow(7,7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
-        [DataRow(8,8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
-        [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
-        [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
-        [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
-
-       // [DataRow(7,7, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, })] // To represent Aug.
-      //  [DataRow(8,8, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, })] // To represent Sep.
-       // [DataRow(9,9, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, })] // To represent Oct.
-    //    [DataRow(10,10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
-       // [DataRow(11,11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
-
-        public void ScalarEncodingOFMonths(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketMonthOfYear(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -647,22 +626,10 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
             {
                  { "W", 3},
-                { "N", 10},
-                { "MinVal", (double)0}, // Min value = (0).
-                { "MaxVal", (double)11}, // Max value = (11).
-                { "Periodic", false},
-
-                { "W", 3},
                 { "N", 14},
                 { "MinVal", (double)0}, // Min value = (0).
-                { "MaxVal", (double)11}, // Max value = (12).
-
- 
                 { "MaxVal", (double)11}, // Max value = (11).
                 { "Periodic", false},
-
-                { "MaxVal", (double)12}, // Max value = (12).
-                { "Periodic", false}, 
                 { "Name", " Month of the Year"},
                 { "ClipInput", true},
             });
@@ -677,7 +644,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+                //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
                 Debug.WriteLine(input);
                 Debug.WriteLine(bucket);
@@ -729,7 +696,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(1200, 15.0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]
         [DataRow(1350, 17.0, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]
         [DataRow(1400, 18.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]
-        public void ScalarBusStationschedule(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketBusStationschedule(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -802,7 +769,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(85.0, 9.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, })]  // Encoding Participant having Entrance number 3.
         [DataRow(96.0, 10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]  // Encoding Participant having Entrance number 9.
 
-        public void ScalarParticipatentNumber(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketTicketNumber(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -831,7 +798,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-               // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+                // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
                 Debug.WriteLine(input);
@@ -877,7 +844,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(58.0, 4.0, new int[] { 0, 0, 0, 0, 1, 1, 1, })] // Encoding the age 50-60 years.
 
 
-        public void ScalarAgeCategories(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketAgeCategories(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -906,7 +873,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-                //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+                // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
 
@@ -923,12 +890,12 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
             }
         }
 
-        
+
 
 
         // Unit test number # 5
         // <summary>
-        // Problem: Encoding the Temperature range in Music Show.
+        // Problem: Encoding the Temperature range in Category and their effects.
         // Considering  have Temperature Range from -10.0-100 celsius.
         // 
         // Calculate the bit width: The bit width is the range of values represented by each bit.
@@ -960,7 +927,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(98.0, 14.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]   //Temperature range (90-100)
 
 
-        public void ScalarTemperatureRangeinConcert(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketTemperatureRanges(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -989,7 +956,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"value:{input} /bucket:{bucketIndex}");
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
                 Debug.WriteLine(input);
@@ -1004,7 +971,6 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
                 // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
-
 
         [TestMethod]
         [TestCategory("Prod")]
