@@ -408,7 +408,7 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(10, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, })] // To represent Nov.
         [DataRow(11, 11, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, })] // To represent Dec.
 
-        public void ScalarEncoderWithBucketMonthOfYear(double input, double bucket, int[] expectedResult)
+            public void ScalarEncoderWithBucketMonthOfYear(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -418,7 +418,7 @@ namespace UnitTestsProject.EncoderTests
 
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
             {
-                 { "W", 3},
+                { "W", 3},
                 { "N", 14},
                 { "MinVal", (double)0}, // Min value = (0).
                 { "MaxVal", (double)11}, // Max value = (11).
@@ -437,7 +437,7 @@ namespace UnitTestsProject.EncoderTests
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-                //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+            //  NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
                 Debug.WriteLine(input);
                 Debug.WriteLine(bucket);
@@ -451,12 +451,14 @@ namespace UnitTestsProject.EncoderTests
                 // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
-        [TestMethod]
-        [TestCategory("Prod")]
+
+
+            [TestMethod]
+            [TestCategory("Prod")]
 
         // Unit Test Number # 2
         // <summary>
-        // Problem: To encode the availability of Bus in a Bus station (Whole Day Schedule).
+        // Problem: To encode the availability of Bus in a Bus station (Complete Day Schedule).
         // Let's assume that train will be available every 30 minutes.
         // Firstly 24 hours clock is converted into minutes which will be equal to 1440 minutes.
         // Start of the day will be the minimum value which is 0 and end of the day will be the maximum value which is 1440.
@@ -489,7 +491,7 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(1200, 15.0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]
         [DataRow(1350, 17.0, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]
         [DataRow(1400, 18.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]
-        public void ScalarEncoderWithBucketBusStationschedule(double input, double bucket, int[] expectedResult)
+            public void ScalarEncoderWithBucketBusStationschedule(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -518,7 +520,7 @@ namespace UnitTestsProject.EncoderTests
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+               // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
                 Debug.WriteLine(input);
@@ -540,7 +542,7 @@ namespace UnitTestsProject.EncoderTests
         // UNIT TEST NUMBER # 3
 
         // <summary>
-        // Problem: Encoding the people participant in a Game show with unique entrance number
+        // Problem: Encoding the people participant in a Music show with unique entrance Ticket number.
         // Considering Participant have Entrance numbers from 0-100.
         // We have to differenciate each Entrance number, so we have to choose N and W such that Resolution is 1.0 .
         // Resolution = (Range/(N-W)); 
@@ -562,7 +564,7 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(85.0, 9.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, })]  // Encoding Participant having Entrance number 3.
         [DataRow(96.0, 10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]  // Encoding Participant having Entrance number 9.
 
-        public void ScalarEncoderWithBucketTicketNumber(double input, double bucket, int[] expectedResult)
+            public void ScalarEncoderWithBucketTicketNumber(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -637,7 +639,7 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(58.0, 4.0, new int[] { 0, 0, 0, 0, 1, 1, 1, })] // Encoding the age 50-60 years.
 
 
-        public void ScalarEncoderWithBucketAgeCategories(double input, double bucket, int[] expectedResult)
+            public void ScalarEncoderWithBucketAgeCategories(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -688,7 +690,7 @@ namespace UnitTestsProject.EncoderTests
 
         // Unit test number # 5
         // <summary>
-        // Problem: Encoding the Temperature range in Category and their effects.
+        // Problem: Encoding the Temperature range and their effects for daily life routine.
         // Considering  have Temperature Range from -10.0-100 celsius.
         // 
         // Calculate the bit width: The bit width is the range of values represented by each bit.
@@ -720,7 +722,7 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(98.0, 14.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]   //Temperature range (90-100)
 
 
-        public void ScalarEncoderWithBucketTemperatureRanges(double input, double bucket, int[] expectedResult)
+            public void ScalarEncoderWithBucketTemperatureRanges(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
 
@@ -749,7 +751,7 @@ namespace UnitTestsProject.EncoderTests
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+             // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
                 Debug.WriteLine(input);
