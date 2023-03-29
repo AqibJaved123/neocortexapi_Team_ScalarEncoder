@@ -45,6 +45,8 @@ namespace UnitTestsProject.EncoderTests
     [TestClass]
     public class ScalarEncoderScalarEncoderExperimentalTestsTests
     {
+        [TestMethod]
+        [TestCategory("Prod")]
 
         // Unit Test I start here
         // <summary>
@@ -62,9 +64,6 @@ namespace UnitTestsProject.EncoderTests
         // where TotalBuckets=5, minValue=0, and Range=11, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
         // X = centerbin - HalfWidth   
-
-        [TestMethod]
-        [TestCategory("Prod")]
 
         [DataRow(0, 0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
         [DataRow(1, 1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
