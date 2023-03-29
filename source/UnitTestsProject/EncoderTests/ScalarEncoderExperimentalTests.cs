@@ -656,7 +656,7 @@ namespace UnitTestsProject.EncoderTests
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-           // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
             Debug.WriteLine(input);
