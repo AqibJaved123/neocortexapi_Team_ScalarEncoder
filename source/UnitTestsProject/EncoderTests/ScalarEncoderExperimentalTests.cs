@@ -578,7 +578,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+            // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
             Debug.WriteLine(input);
@@ -596,7 +596,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         // Unit Test VI Ends here
 
 
-        // Unit Test B Starts here
+        // Unit Test VII Starts here
         [TestMethod]
         [TestCategory("Prod")]
         // <summary>
@@ -661,7 +661,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"value:{input} /bucket:{bucketIndex}");
+            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
             Debug.WriteLine(input);
@@ -675,10 +675,10 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
 
         }
-        // Unit Test B Ends here
+        // Unit Test VII Ends here
 
 
-        // Unit Test C Starts here
+        // Unit Test VIII Starts here
         [TestMethod]
         [TestCategory("Prod")]
         // <summary>
@@ -740,7 +740,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
 
         }
-        // Unit Test C Ends here
+        // Unit Test VIII Ends here
 
         // Unit Test D Starts here
         [TestMethod]
