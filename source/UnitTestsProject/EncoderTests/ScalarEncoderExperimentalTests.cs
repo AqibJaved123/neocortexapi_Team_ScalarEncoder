@@ -46,7 +46,7 @@ namespace UnitTestsProject.EncoderTests
     public class ScalarEncoderScalarEncoderExperimentalTestsTests
     {
 
-        // Unit test Number# 1
+        // Unit Test I start here
         // <summary>
         // Problem : Encoding the different Month of Year
         // This MinVal is 0 (January) and the MaxVal 12 (December).
@@ -123,10 +123,13 @@ namespace UnitTestsProject.EncoderTests
             }
         }
 
+        // Unit Test I Ends here
+
             [TestMethod]
             [TestCategory("Prod")]
 
-        // Unit Test Number # 2
+        // Unit Test II start here
+
         // <summary>
         // Problem: To encode the availability of Bus in a Bus station (Complete Day Schedule).
         // Let's assume that train will be available every 30 minutes.
@@ -206,10 +209,12 @@ namespace UnitTestsProject.EncoderTests
             }
         }
 
+        // Unit Test II Ends here
+
         [TestMethod]
         [TestCategory("Prod")]
 
-        // UNIT TEST NUMBER # 3
+        // Unit Test III start here
 
         // <summary>
         // Problem: Encoding the people participant in a Music show with unique entrance Ticket number.
@@ -235,7 +240,7 @@ namespace UnitTestsProject.EncoderTests
         [DataRow(96.0, 10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]  // Encoding Participant having Entrance ticket number 9.
 
             public void ScalarEncoderWithBucketTicketNumber(double input, double bucket, int[] expectedResult)
-        {
+      {
             string outFolder = nameof(ScalarEncodingExperiment);
 
             Directory.CreateDirectory(outFolder);
@@ -243,8 +248,8 @@ namespace UnitTestsProject.EncoderTests
             DateTime now = DateTime.Now;
 
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
-            {
-         { "W",11},
+      {
+        { "W",11},
         { "N", 21 },
         { "MinVal", (double)0},      // Min value of Entrance number.
         { "MaxVal", (double)100},     // Max value of Entrance number.
@@ -279,8 +284,14 @@ namespace UnitTestsProject.EncoderTests
             }
         }
 
-        // Unit Test # 4
-        //// <summary>
+        // Unit Test III Ends here
+
+        [TestMethod]
+        [TestCategory("Prod")]
+
+        // Unit Test IV starts here
+
+        // <summary>
         // Problem: Encoding the different category of people in the Company according to their ages.
         // Let us say we have Young,  adults, Middle Age and senior People in the Company.
         // We have to differenciate Ages based on this category.
@@ -296,10 +307,6 @@ namespace UnitTestsProject.EncoderTests
         // where TotalBuckets=5, minValue=0, and Range=59, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
         // X = centerbin - HalfWidth   
-
-
-        [TestMethod]
-        [TestCategory("Age category of empolyees")]
 
         [DataRow(18.0, 1.0, new int[] { 0, 1, 1, 1, 0, 0, 0, })] // Encoding the age  0-18 years.
         [DataRow(30.0, 2.0, new int[] { 0, 0, 1, 1, 1, 0, 0, })] // Encoding the age 19-30 years.
@@ -350,8 +357,10 @@ namespace UnitTestsProject.EncoderTests
              // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
+        // Unit Test IV Ends here
 
-        // Unit test number # 5
+        // Unit Test V starts here
+
         // <summary>
         // Problem: Encoding the Temperature range and their effects for daily life routine.
         // Considering  have Temperature Range from -10.0-100 celsius.
@@ -374,15 +383,15 @@ namespace UnitTestsProject.EncoderTests
         [TestCategory("Prod")]
 
 
-        [DataRow(-9.0, -5.0, new int[] { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]   //Temperature range (0-10)
-        [DataRow(-2.0, -4.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]   //Temperature range (10-20)
-        [DataRow(8.0, -2.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]   //Temperature range (20-30)
-        [DataRow(31.0, 2.0, new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]   //Temperature range (30-40)
-        [DataRow(57.0, 7.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]   //Temperature range (40-50)
-        [DataRow(73.0, 10.0, new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   //Temperature range (50-60)
-        [DataRow(81.0, 11.0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   //Temperature range (60-70)
-        [DataRow(93.0, 13.0, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]   //Temperature range (70-80)
-        [DataRow(98.0, 14.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]   //Temperature range (90-100)
+        [DataRow(-9.0, -5.0, new int[] { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]  
+        [DataRow(-2.0, -4.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]   
+        [DataRow(8.0, -2.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]   
+        [DataRow(31.0, 2.0, new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]   
+        [DataRow(57.0, 7.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]   
+        [DataRow(73.0, 10.0, new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   
+        [DataRow(81.0, 11.0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   
+        [DataRow(93.0, 13.0, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]   
+        [DataRow(98.0, 14.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]   
             public void ScalarEncoderWithBucketTemperatureRanges(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
@@ -427,7 +436,7 @@ namespace UnitTestsProject.EncoderTests
              // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
-
+        // Unit Test V Ends here
 
         // Unit Test VI Starts here
 
