@@ -46,14 +46,7 @@ namespace UnitTestsProject.EncoderTests
     public class ScalarEncoderScalarEncoderExperimentalTestsTests
     {
 
-
-
-
-
-
-
-
-        // Unit test Number# 1
+        // Unit Test I start here
         // <summary>
         // Problem : Encoding the different Month of Year
         // This MinVal is 0 (January) and the MaxVal 12 (December).
@@ -64,73 +57,14 @@ namespace UnitTestsProject.EncoderTests
         // So, choose the encoding parameters such that resolution addresses the problem.
         // Once the input has been encoded, we are calling the Bitmap method to show output in 2D Bitmap Format.
         // </summary>
-        // Total buckets  = 14-3+1 = 12
-
-
         // b=N-W+1
+        // Total buckets  = 14-3+1 = 12
         // where TotalBuckets=5, minValue=0, and Range=11, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
-        //x = centerbin - HalfWidth   
-
- 
-
-
-        // ith bucket= floor(TotalBuckets*(Value-minValue)/Range)
-        // where TotalBuckets=12, minValue=0, and Range=11, 
-        //we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
-
-        /* where TotalBuckets=12, minValue=0, and Range=11, we can plug in each value from 0 to 11 for Value and solve for ithbucket using the floor function to round down to the nearest integer.
-
-For Value = 0:
-ithbucket = floor(12*(0-0)/11) = floor(0) = 0
-
-For Value = 1:
-ithbucket = floor(12*(1-0)/11) = floor(1.09) = 1
-
-For Value = 2:
-ithbucket = floor(12*(2-0)/11) = floor(2.18) = 2
-
-For Value = 3:
-ithbucket = floor(12*(3-0)/11) = floor(3.27) = 3
-
-For Value = 4:
-ithbucket = floor(12*(4-0)/11) = floor(4.36) = 4
-
-For Value = 5:
-ithbucket = floor(12*(5-0)/11) = floor(5.45) = 5
-
-For Value = 6:
-ithbucket = floor(12*(6-0)/11) = floor(6.55) = 6
-
-For Value = 7:
-ithbucket = floor(12*(7-0)/11) = floor(7.64) = 7
-
-For Value = 8:
-ithbucket = floor(12*(8-0)/11) = floor(8.73) = 8
-
-For Value = 9:
-ithbucket = floor(12*(9-0)/11) = floor(9.82) = 9
-
-For Value = 10:
-ithbucket = floor(12*(10-0)/11) = floor(10.91) = 10
-
-For Value = 11:
-ithbucket = floor(12*(11-0)/11) = floor(12) = 11
-
-Therefore, the ith bucket for values 0 to 11 using the given formula would be:
-
-0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-
-
-
-
-  */
-
-
+        // X = centerbin - HalfWidth   
 
         [TestMethod]
-        [TestCategory("Months of the Year")]
-
+        [TestCategory("Prod")]
 
         [DataRow(0, 0, new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Jan.
         [DataRow(1, 1, new int[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })] // To represent Feb.
@@ -185,15 +119,17 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
                 Assert.IsTrue(expectedResult.SequenceEqual(result) && bucket == bucketIndex); // Assert.IsTrue is used to check whether the given input result and bucket matches with the expected result and expected bucket.
 
-                // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+             // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
 
+        // Unit Test I Ends here
 
             [TestMethod]
             [TestCategory("Prod")]
 
-        // Unit Test Number # 2
+        // Unit Test II start here
+
         // <summary>
         // Problem: To encode the availability of Bus in a Bus station (Complete Day Schedule).
         // Let's assume that train will be available every 30 minutes.
@@ -210,7 +146,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         // Total buckets  = 24-11+1 = 14
         // where TotalBuckets=14, minValue=0, and Range=1440, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
-        //x = centerbin - HalfWidth   
+        // X = centerbin - HalfWidth   
 
         [DataRow(40, -5.0, new int[] { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
         [DataRow(100, -4.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]
@@ -247,7 +183,6 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         { "ClipInput", true},
     });
 
-
             {
 
                 var result = encoder.Encode(input);
@@ -269,14 +204,17 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
                 Assert.IsTrue(expectedResult.SequenceEqual(result) && bucket == bucketIndex); // Assert.IsTrue is used to check whether the given input result and bucket matches with the expected result and expected bucket.
 
-                // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+             // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+
             }
         }
+
+        // Unit Test II Ends here
 
         [TestMethod]
         [TestCategory("Prod")]
 
-        // UNIT TEST NUMBER # 3
+        // Unit Test III start here
 
         // <summary>
         // Problem: Encoding the people participant in a Music show with unique entrance Ticket number.
@@ -290,19 +228,19 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         // Total buckets  = 21-11+1 = 11
         // where TotalBuckets=11, minValue=0, and Range=100, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
-        //x = centerbin - HalfWidth   
+        // X = centerbin - HalfWidth   
 
 
-        [DataRow(2.0, 0.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 2.
-        [DataRow(7.0, 1.0, new int[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance number 7.
-        [DataRow(34.0, 3.0, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })] // Encoding Participant having Entrance number 10
-        [DataRow(57.0, 6.0, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, })] // Encoding Participant having Entrance number 1.
-        [DataRow(78.0, 8.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]  // Encoding Participant having Entrance number 8.
-        [DataRow(85.0, 9.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, })]  // Encoding Participant having Entrance number 3.
-        [DataRow(96.0, 10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]  // Encoding Participant having Entrance number 9.
+        [DataRow(2.0, 0.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance ticket number 2.
+        [DataRow(7.0, 1.0, new int[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, })]  // Encoding Participant having Entrance ticket number 7.
+        [DataRow(34.0, 3.0, new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })] // Encoding Participant having Entrance ticket number 10
+        [DataRow(57.0, 6.0, new int[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, })] // Encoding Participant having Entrance ticket number 1.
+        [DataRow(78.0, 8.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]  // Encoding Participant having Entrance ticket number 8.
+        [DataRow(85.0, 9.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, })]  // Encoding Participant having Entrance ticket number 3.
+        [DataRow(96.0, 10.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]  // Encoding Participant having Entrance ticket number 9.
 
             public void ScalarEncoderWithBucketTicketNumber(double input, double bucket, int[] expectedResult)
-        {
+      {
             string outFolder = nameof(ScalarEncodingExperiment);
 
             Directory.CreateDirectory(outFolder);
@@ -310,8 +248,8 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
             DateTime now = DateTime.Now;
 
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
-            {
-         { "W",11},
+      {
+        { "W",11},
         { "N", 21 },
         { "MinVal", (double)0},      // Min value of Entrance number.
         { "MaxVal", (double)100},     // Max value of Entrance number.
@@ -345,8 +283,15 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
                 // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
-        // Unit Test # 4
-        //// <summary>
+
+        // Unit Test III Ends here
+
+        [TestMethod]
+        [TestCategory("Prod")]
+
+        // Unit Test IV starts here
+
+        // <summary>
         // Problem: Encoding the different category of people in the Company according to their ages.
         // Let us say we have Young,  adults, Middle Age and senior People in the Company.
         // We have to differenciate Ages based on this category.
@@ -361,12 +306,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         // Total buckets  = 7-3+1 = 5
         // where TotalBuckets=5, minValue=0, and Range=59, 
         // ith bucket=  ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding
-        //x = centerbin - HalfWidth   
-
-
-        [TestMethod]
-        [TestCategory("Age category of empolyees")]
-
+        // X = centerbin - HalfWidth   
 
         [DataRow(18.0, 1.0, new int[] { 0, 1, 1, 1, 0, 0, 0, })] // Encoding the age  0-18 years.
         [DataRow(30.0, 2.0, new int[] { 0, 0, 1, 1, 1, 0, 0, })] // Encoding the age 19-30 years.
@@ -374,7 +314,6 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(40.0, 3.0, new int[] { 0, 0, 0, 1, 1, 1, 0, })] // Encoding the age 35-40 years.
         [DataRow(45.0, 3.0, new int[] { 0, 0, 0, 1, 1, 1, 0, })] // Encoding the age 45-50 years.
         [DataRow(58.0, 4.0, new int[] { 0, 0, 0, 0, 1, 1, 1, })] // Encoding the age 50-60 years.
-
 
             public void ScalarEncoderWithBucketAgeCategories(double input, double bucket, int[] expectedResult)
         {
@@ -395,7 +334,6 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
              { "ClipInput", true},
     });
 
-
             {
 
                 var result = encoder.Encode(input);
@@ -407,8 +345,6 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
                 // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
-
-
                 Debug.WriteLine(input);
                 Debug.WriteLine(bucket);
                 Debug.WriteLine(bucketIndex);
@@ -418,14 +354,13 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
                 Assert.IsTrue(expectedResult.SequenceEqual(result) && bucket == bucketIndex); // Assert.IsTrue is used to check whether the given input result and bucket matches with the expected result and expected bucket.
 
-                // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+             // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
+        // Unit Test IV Ends here
 
+        // Unit Test V starts here
 
-
-
-        // Unit test number # 5
         // <summary>
         // Problem: Encoding the Temperature range and their effects for daily life routine.
         // Considering  have Temperature Range from -10.0-100 celsius.
@@ -448,17 +383,15 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [TestCategory("Prod")]
 
 
-        [DataRow(-9.0, -5.0, new int[] { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]   //Temperature range (0-10)
-        [DataRow(-2.0, -4.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]   //Temperature range (10-20)
-        [DataRow(8.0, -2.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]   //Temperature range (20-30)
-        [DataRow(31.0, 2.0, new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]   //Temperature range (30-40)
-        [DataRow(57.0, 7.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]   //Temperature range (40-50)
-        [DataRow(73.0, 10.0, new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   //Temperature range (50-60)
-        [DataRow(81.0, 11.0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   //Temperature range (60-70)
-        [DataRow(93.0, 13.0, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]   //Temperature range (70-80)
-        [DataRow(98.0, 14.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]   //Temperature range (90-100)
-
-
+        [DataRow(-9.0, -5.0, new int[] { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]  
+        [DataRow(-2.0, -4.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, })]   
+        [DataRow(8.0, -2.0, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, })]   
+        [DataRow(31.0, 2.0, new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, })]   
+        [DataRow(57.0, 7.0, new int[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]   
+        [DataRow(73.0, 10.0, new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   
+        [DataRow(81.0, 11.0, new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, })]   
+        [DataRow(93.0, 13.0, new int[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]   
+        [DataRow(98.0, 14.0, new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, })]   
             public void ScalarEncoderWithBucketTemperatureRanges(double input, double bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncodingExperiment);
@@ -500,15 +433,16 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
 
                 Assert.IsTrue(expectedResult.SequenceEqual(result) && bucket == bucketIndex); // Assert.IsTrue is used to check whether the given input result and bucket matches with the expected result and expected bucket.
 
-                // Assert.IsTrue is used to check whether the given input result matches with the expected result.
+             // Assert.IsTrue is used to check whether the given input result matches with the expected result.
             }
         }
-
+        // Unit Test V Ends here
 
         // Unit Test VI Starts here
 
         [TestMethod]
         [TestCategory("Prod")]
+
         // <summary>
         // Problem : This is basic unit test for Scalar Enocder with buckets for the non periodic SDR.In this test we just taking
         // first tweenty numeric values from 0 to 20.The updated encoder(Scalar Encoder with buckets)
@@ -551,11 +485,8 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(19, 14, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, })]
         [DataRow(20, 15, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, })]
 
-
-
         public void ScalarEncoderWithBucketBasicUnitTest(double input, int  bucket, int[] expectedResult)
         {
-
 
             string outFolder = nameof(ScalarEncoderWithBucketBasicUnitTest);
             Directory.CreateDirectory(outFolder);
