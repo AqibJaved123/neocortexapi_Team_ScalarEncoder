@@ -42,20 +42,6 @@ namespace UnitTestsProject.EncoderTests
     ///
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     [TestClass]
     public class ScalarEncoderScalarEncoderExperimentalTestsTests
     {
@@ -77,9 +63,9 @@ namespace UnitTestsProject.EncoderTests
         //HalfWidth = (W - 1) / 2
         //Padding = HalfWidth
         //Range = RangeInternal + Resolution
-        //centerbin = int (((input - MinVal) + Resolution / 2) / Resolution) + Padding
+        //x = float (((input - MinVal) + Resolution / 2) / Resolution) + Padding
 
-        //bucket_index = centerbin - HalfWidth
+        //bucket_index = x - HalfWidth
         // </summary>
       
 
