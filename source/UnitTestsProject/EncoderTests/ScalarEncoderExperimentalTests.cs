@@ -661,7 +661,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+           // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
             Debug.WriteLine(input);
@@ -703,7 +703,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
         [DataRow(0.9, 16, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, })]
         [DataRow(1.0, 18, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, })]
 
-        public void ScalarEncoderWithBucketUnitTestDecimalValues(double input, double bucket, int[] expectedResult)
+        public void ScalarEncoderWithBucketUnitTestDecimalValues(double input, int  bucket, int[] expectedResult)
         {
             string outFolder = nameof(ScalarEncoderWithBucketUnitTestDecimalValues);
             Directory.CreateDirectory(outFolder);
@@ -726,7 +726,7 @@ Therefore, the ith bucket for values 0 to 11 using the given formula would be:
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"value:{input} /bucket:{bucketIndex}");
+            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
             Debug.WriteLine(input);
