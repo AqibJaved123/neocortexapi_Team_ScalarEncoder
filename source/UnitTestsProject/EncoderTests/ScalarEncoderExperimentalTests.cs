@@ -797,7 +797,7 @@ namespace UnitTestsProject.EncoderTests
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-             NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
+             // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
             Debug.WriteLine(input);
             Debug.WriteLine(bucket);
             Debug.WriteLine(bucketIndex);
@@ -812,7 +812,7 @@ namespace UnitTestsProject.EncoderTests
 
         // Unit Test X Ends here
 
-        // Unit Test F Starts here
+        // Unit Test XI Starts here
         [TestMethod]
         [TestCategory("Prod")]
         // <summary>
@@ -877,7 +877,7 @@ namespace UnitTestsProject.EncoderTests
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
-            // NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Gray, Color.Green, text: $"value:{input} /bucket:{bucketIndex}");
+            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{input}.png", Color.Black, Color.Red, text: $"value:{input} /bucket:{bucketIndex}");
 
 
             Debug.WriteLine(input);
@@ -892,7 +892,7 @@ namespace UnitTestsProject.EncoderTests
 
         }
 
-        // Unit Test F Ends here
+        // Unit Test XI Ends here
 
 
 
