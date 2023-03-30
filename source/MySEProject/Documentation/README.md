@@ -33,7 +33,6 @@ The purpose of the test method is to ensure that the Scalar Encoder with buckets
 
 ![3](https://user-images.githubusercontent.com/116574834/228849897-02a911c5-2f06-4de3-8a76-96d9ac10070e.png)
 
-
 # Conclusion 
 The execution of the scalar encoder with containers was effective, as it gave an adaptable and proficient strategy for encoding scalar qualities into meager circulated portrayals. The use of buckets made it possible to have more precise control over the encoding process, which made it easier to encode values with a lot of variation. Additionally, the encoder was able to encode cyclic values thanks to the use of periodicity.
 
