@@ -630,6 +630,41 @@ namespace UnitTestsProject.EncoderTests
         }
 
         /// <summary>
+        /// This test case checks the bucket match score calculation with non-periodic input
+        /// and an absolute difference. It configures parameters, provides expected and actual values,
+        /// calculates the match score, and asserts that the score falls within an acceptable range.
+        /// </summary>
+        [TestMethod]
+        public void BucketMatchScore_NonPeriodicWithAbsoluteDifference_ReturnsExpectedScore()
+        {
+            // Arrange
+            // Configure parameters for the BucketMatch class.
+            BucketMatchScore.ConfigureParameters(100, 0, false, true, 101);
+
+            // Define expected and actual values for the test case.
+            double[] expectedValues = new double[] { 50 };
+            double[] actualValues = new double[] { 51 };
+
+            // Specify whether to use fractional difference in the score calculation.
+            bool useFractionalDifference = false;
+
+            // Define the expected match score for assertion.
+            double expectedScore = 1.0;
+
+            // Act
+            // Calculate the match score using the BucketMatch class.
+            double[] actualScores = BucketMatchScore.GetBucketMatchScore(expectedValues, actualValues, useFractionalDifference);
+
+            // Assert
+            // Ensure that the calculated score matches the expected score within an acceptable range.
+            Assert.AreEqual(expectedScore, actualScores[0], 0.01);
+
+            // Output the result for review.
+            Console.WriteLine($"Expected closeness: {expectedScore:F2}");
+            Console.WriteLine($"Actual closeness: {actualScores[0]:F12}");
+        }
+
+        /// <summary>
         /// Initializes encoder and sets mandatory properties.
         /// </summary>
         [TestMethod]
