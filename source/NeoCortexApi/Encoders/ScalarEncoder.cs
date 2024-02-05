@@ -766,6 +766,63 @@ namespace NeoCortexApi.Encoders
             }
         }
 
+        /// <summary>
+        /// Computes the boundaries of a specified value within a range of values.
+        /// Throws exceptions for invalid input or encoder constraints.
+        /// </summary>
+        /// <param name="value">The value to be placed into a bucket.</param>
+        /// <returns>An array with the lower and upper bounds of the value's bucket.</returns>
+        /// <exception cref="ArgumentException">Thrown for non-numeric or out-of-range input.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the bucket width is deemed invalid.</exception>
+        public double[] DetermineBucketBounds(double value)
+        {
+            // Handle special cases
+            switch (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                case true:
+                    throw new ArgumentException("Invalid number provided as input.");
+                default:
+                    break;
+            }
+
+            switch (value < this.MinVal || value >= this.MaxVal)
+            {
+                case true:
+                    throw new ArgumentException("Input value is beyond the encoder's specified range.");
+                default:
+                    break;
+            }
+
+            int numberOfBuckets = 100;
+
+            // Compute the width of each bucket
+            double bucketWidth = (this.MaxVal - this.MinVal) / (double)this.NumBuckets;
+
+            switch (double.IsInfinity(bucketWidth) || double.IsNaN(bucketWidth) || bucketWidth <= 0.0)
+            {
+                case true:
+                    throw new InvalidOperationException("Invalid bucket width detected.");
+                default:
+                    break;
+            }
+
+            Console.WriteLine("Bucket Width: " + bucketWidth);
+
+            // Determine the index of the bucket containing the input value
+            int bucketIndex = (int)((value - this.MinVal) / bucketWidth);
+            Console.WriteLine("Bucket Index: " + bucketIndex);
+
+            // Compute the lower and upper bounds of the bucket
+            double lowerBound = bucketIndex * bucketWidth + this.MinVal;
+            Console.WriteLine("Lower Bound: " + lowerBound);
+
+            double upperBound = (bucketIndex + 1) * bucketWidth + this.MinVal;
+            Console.WriteLine("Upper Bound: " + upperBound);
+
+            // Return the bucket boundaries
+            return new double[] { lowerBound, upperBound };
+        }
+
 
         /// <summary>
         /// This method enables running in the network.
