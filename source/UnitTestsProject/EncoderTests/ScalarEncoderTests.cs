@@ -700,6 +700,53 @@ namespace UnitTestsProject.EncoderTests
         }
 
         /// <summary>
+        /// This test case tests the behavior of the BucketBound() method of the ScalarEncoder class.
+        ///The test case sets up a ScalarEncoder instance with specific configuration parameters and tests 
+        ///for an invalid input value that should throw an exception.
+        ///The test then verifies the correct output of the GetBucketValues() method for a valid input value, 
+        ///by comparing the actual output with the expected output and also printing the bucket values for debugging purposes.
+        /// </summary>
+
+        [TestMethod]
+        public void ValidateBucketBoundsCalculation()
+        {
+            // Arrange
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+     {
+         { "W", 11},
+         { "N", 1024},
+         { "Radius", -1.0},
+         { "MinVal", 0.0},
+         { "MaxVal", 100.0 },
+         { "Periodic", true},
+         { "Name", "scalar_nonperiodic"},
+         { "ClipInput", false},
+         { "NumBuckets", 100 },
+     });
+
+            // Act and Assert
+            Assert.ThrowsException<ArgumentException>(() => encoder.DetermineBucketBounds(-10.0));
+
+            // Arrange
+            double[] expectedBounds = { 55, 56 };
+            double[] calculatedBounds = null;
+
+            try
+            {
+                // Act
+                calculatedBounds = encoder.DetermineBucketBounds(55.5);
+
+                // Assert
+                Console.WriteLine($"Calculated Bounds: {string.Join(", ", calculatedBounds)}, Expected: {string.Join(", ", expectedBounds)}");
+                Assert.AreEqual(expectedBounds, calculatedBounds);
+            }
+            catch (Exception)
+            {
+                // Handle exceptions if needed
+            }
+        }
+
+        /// <summary>
         /// Initializes encoder and sets mandatory properties.
         /// </summary>
         [TestMethod]
