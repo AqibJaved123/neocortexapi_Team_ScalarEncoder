@@ -850,5 +850,74 @@ namespace NeoCortexApi.Encoders
         //    var excludeMembers = new List<string> { nameof(ScalarEncoder.Properties) };
         //    return HtmSerializer2.DeserializeObject<T>(sr, name, excludeMembers);
         //}
+
+
+        /// <summary>
+        /// Maps an input value to a set of buckets using binary encoding.
+        /// </summary>
+        /// <param name="input">The input value to be mapped to buckets.</param>
+        /// <param name="isPeriodic">Specifies whether the encoder is periodic or not.</param>
+        /// <param name="numBuckets">The number of buckets to be used for mapping.</param>
+        /// <returns>An array of binary values representing the mapping of the input value to the buckets.</returns>
+        public int[] MapInputToBuckets(double input, bool isPeriodic, int numBuckets)
+        {
+            int[] mapping = new int[numBuckets];
+
+            // Choose the mapping strategy based on whether the encoder is periodic or not
+            if (isPeriodic)
+            {
+                MapPeriodicInput(input, numBuckets, mapping);
+            }
+            else
+            {
+                MapNonPeriodicInput(input, numBuckets, mapping);
+            }
+
+            return mapping;
+        }
+
+        /// <summary>
+        /// Maps an input value to buckets using periodic encoding.
+        /// </summary>
+        /// <param name="input">The input value to be mapped to buckets.</param>
+        /// <param name="numBuckets">The number of buckets to be used for mapping.</param>
+        /// <param name="mapping">The array to store the binary mapping.</param>
+        private void MapPeriodicInput(double input, int numBuckets, int[] mapping)
+        {
+            // Calculate the width of each bucket
+            double bucketWidth = 1.0 / numBuckets;
+
+            // Calculate the index of the bucket that the input belongs to
+            int bucketIndex = (int)Math.Floor(input / bucketWidth);
+
+            // Loop through each bucket and set the binary mapping based on the distance
+            for (int i = 0; i < numBuckets; i++)
+            {
+                double distance = Math.Abs(i - bucketIndex) * bucketWidth;
+                mapping[i] = (distance <= bucketWidth / 2) ? 1 : 0;
+            }
+        }
+
+        /// <summary>
+        /// Maps an input value to buckets using non-periodic encoding.
+        /// </summary>
+        /// <param name="input">The input value to be mapped to buckets.</param>
+        /// <param name="numBuckets">The number of buckets to be used for mapping.</param>
+        /// <param name="mapping">The array to store the binary mapping.</param>
+        private void MapNonPeriodicInput(double input, int numBuckets, int[] mapping)
+        {
+            // Calculate the width of each bucket
+            double bucketWidth = 1.0 / numBuckets;
+
+            // Calculate the index of the bucket that the input belongs to
+            int bucketIndex = (int)Math.Floor(input / bucketWidth);
+
+            // Loop through each bucket and set the binary mapping based on the distance
+            for (int i = 0; i < numBuckets; i++)
+            {
+                double distance = Math.Abs(i - bucketIndex) * bucketWidth;
+                mapping[i] = (distance <= bucketWidth / 2) ? 1 : 0;
+            }
+        }
     }
 }
