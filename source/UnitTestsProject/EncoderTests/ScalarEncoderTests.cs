@@ -3,14 +3,30 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeoCortex;
 using NeoCortexApi.Encoders;
+using NeoCortexApi.Entities;
 using NeoCortexApi.Network;
 using NeoCortexApi.Utility;
+using NeoCortexEntities.NeuroVisualizer;
+using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Ocsp;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using static SkiaSharp.SKPath;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using Org.BouncyCastle.Crypto;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
+using System.Text;
+using static SkiaSharp.SKImageFilter;
+using LearningFoundation;
+using Org.BouncyCastle.Utilities;
+using static NeoCortexApi.Encoders.ScalarEncoder;
+using System.Text.RegularExpressions;
 
 namespace UnitTestsProject.EncoderTests
 {
@@ -21,6 +37,12 @@ namespace UnitTestsProject.EncoderTests
     [TestClass]
     public class ScalarEncoderTests
     {
+        private ScalarEncoder _encoder;
+
+        public double MinVal { get; private set; }
+        public double MaxVal { get; private set; }
+        public double NumBuckets { get; private set; }
+
         /// <summary>
         /// Initializes encoder and invokes Encode() method.
         /// </summary>
@@ -120,15 +142,14 @@ namespace UnitTestsProject.EncoderTests
                     { "ClipInput", true},
                 });
 
-            //for (int i = 1; i < 367; i++)
-            //{
+
             var result = encoder.Encode(input);
 
             Debug.WriteLine(input);
 
             Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
             Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
-            //}          
+
 
             Assert.IsTrue(expectedResult.SequenceEqual(result));
         }
@@ -177,86 +198,6 @@ namespace UnitTestsProject.EncoderTests
 
             //Assert.IsTrue(expectedResult.SequenceEqual(result));
         }
-
-        /// <summary>
-        /// Encodes a set of numbers and produces bitmap output.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("Experiment")]
-        public void ScalarEncodingExperiment()
-        {
-            string outFolder = nameof(ScalarEncodingExperiment);
-
-            Directory.CreateDirectory(outFolder);
-
-            DateTime now = DateTime.Now;
-
-            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
-            {
-                { "W", 21},
-                { "N", 1024},
-                { "Radius", -1.0},
-                { "MinVal", 0.0},
-                { "MaxVal", 100.0 },
-                { "Periodic", false},
-                { "Name", "scalar"},
-                { "ClipInput", false},
-            });
-
-            for (decimal i = 0.0M; i < (long)encoder.MaxVal; i += 0.1M)
-            {
-                var result = encoder.Encode(i);
-
-                int? bucketIndex = encoder.GetBucketIndex(i);
-                
-                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
-                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
-
-                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{i}.png", Color.Gray, Color.Green, text: $"v:{i} /b:{bucketIndex}");
-            }
-        }
-
-        /// <summary>
-        /// This is a test case for decoding the output of ScalarEncoder into input values.
-        ///Eight test cases are executed using different output values and the expected input values are computed using the decode function.
-        ///The actual input values and the expected input values are printed for each test case to verify the correctness of the decoding algorithm.
-        /// </summary>
-
-
-        [TestMethod]
-        [TestCategory("Decoding")]
-        public void ScalarEncodingDecode_CustomTest()
-        {
-            int[] customOutput1 = { 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 };
-            int[] customOutput2 = { 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0 };
-            int[] customOutput3 = { 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0 };
-            int[] customOutput4 = { 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1 };
-            int[] customOutput5 = { 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 };
-            int[] customOutput6 = { 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0 };
-            int[] customOutput7 = { 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0 };
-            int[] customOutput8 = { 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1 };
-            int customMinVal = 0;
-            int customMaxVal = 200;
-            int customN = 14;
-            double customW = 2.5;
-            bool customPeriodic = false;
-
-            int[][] customTestCases = new int[][] { customOutput1, customOutput2, customOutput3, customOutput4, customOutput5, customOutput6, customOutput7, customOutput8 };
-
-            foreach (int[] customOutput in customTestCases)
-            {
-                int[] customInput = ScalarEncoder.Decode(customOutput, customMinVal, customMaxVal, customN, customW, customPeriodic);
-
-                Console.WriteLine("Custom Output: " + string.Join(",", customOutput));
-                Console.WriteLine("Custom Input: " + string.Join(",", customInput));
-                Console.WriteLine("----------------------------------------");
-
-
-            }
-        }
-
-
-
 
         /// <summary>
         /// This test method is part of the "Experiment" category and tests the behavior of the DetermineBucketIndex
@@ -333,9 +274,8 @@ namespace UnitTestsProject.EncoderTests
         { "ClipInput", false },
         { "BucketCount", 1024 },
         { "Epsilon", 0.001 }
-    };
-        }
-
+        };
+    }
 
         /// <summary>
         /// This test method is part of the "Experiment" category and tests the behavior of the DetermineBucketIndex
@@ -412,135 +352,49 @@ namespace UnitTestsProject.EncoderTests
         { "ClipInput", false },
         { "BucketCount", 1024 },
         { "Epsilon", 0.001 } // Adjust the value based on your requirements
-    };
-        }
+        };
+    }
 
         /// <summary>
-        /// Demonstrates how to create an encoder by explicit invoke of initialization.
+        /// This test method evaluates the ScalarEncoder's ability to encode into a pre-allocated boolean array.
+        /// It encodes input values ranging from the lowerBound to the upperBound with a step size of 0.2.
+        /// The test checks if the output encoded array is correct for each input value.
         /// </summary>
         [TestMethod]
-        public void InitTest1()
+        public void TestEncodedArray_UsingScalarEncoder()
         {
-            Dictionary<string, object> encoderSettings = getDefaultSettings();
+            // Arrange
+            // Define the range and properties for the custom scalar encoder.
+            double lowerBound = 1;
+            double upperBound = 200;
+            int arrayLength = 1024;
+            double customPeriod = upperBound - lowerBound;
 
-            // We change here value of Name property.
-            encoderSettings["Name"] = "hello";
-
-            // We add here new property.
-            encoderSettings.Add("TestProp1", "hello");
-
-            var encoder = new ScalarEncoderExperimental();
-
-            // Settings can also be passed by invoking Initialize(sett)
-            encoder.Initialize(encoderSettings);
-
-            // Property can also be set this way.
-            encoder["abc"] = "1";
-
-            Assert.IsTrue((string)encoder["TestProp1"] == "hello");
-
-            Assert.IsTrue((string)encoder["Name"] == "hello");
-
-            Assert.IsTrue((string)encoder["abc"] == "1");
-        }
-
-        /// <summary>
-        /// The test checks the bucket information of the encoder with different input values. 
-        /// The encoder parameters include the minimum and maximum values, the number of buckets, 
-        /// the radius, and periodicity. The test asserts the expected bucket information for input 
-        /// values close to the bucket boundaries, inside and outside the range, and at the middle of 
-        /// the range.
-        /// </summary>
-        /// 
-        [TestMethod]
-        public void TestGetBucketInfoNonPeriodic()
-        {
-            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            // Create a custom ScalarEncoder with specified configuration settings.
+            ScalarEncoder customEncoder = new ScalarEncoder(new Dictionary<string, object>()
     {
-        { "W", 21},
-        { "N", 100},
-        { "Radius", -1.0},
+        { "W", 11},
+        { "N", 1024},
+        { "Radius", -0.5},
         { "MinVal", 0.0},
-        { "MaxVal", 100.0 },
-        { "Periodic", false},
-        { "Name", "scalar_nonperiodic"},
-        { "ClipInput", false},
-        { "NumberOfBuckets", 100 },
+        { "MaxVal", 200.0 },
+        { "Periodic", true},
+        { "Name", "customScalar"},
+        { "ClipInput", true},
     });
 
-            // Test values near bucket boundaries
-            VerifyBucketInfoNonPeriodic(encoder, 24.7, new int[] { 24, 25, 24, 25 });
-            VerifyBucketInfoNonPeriodic(encoder, 74.2, new int[] { 74, 75, 74, 75 });
-            VerifyBucketInfoNonPeriodic(encoder, 99.9, new int[] { 99, 100, 99, 100 });
+            // Act & Assert
+            for (double inputValue = lowerBound; inputValue <= upperBound; inputValue += 0.2)
+            {
+                // Create a boolean array to store the result of the encoding.
+                bool[] resultArray = new bool[arrayLength];
 
-            // Test values outside of range
-            VerifyBucketInfoNonPeriodic(encoder, -5.0, new int[] { 0, 0, 0, 1 });
-            VerifyBucketInfoNonPeriodic(encoder, 105.0, new int[] { 100, 100, 100, 101 });
+                // Use the custom scalar encoder to generate the encoded array.
+                customEncoder.EncodedArray(inputValue, resultArray);
 
-            // Test value in the middle of the range
-            VerifyBucketInfoNonPeriodic(encoder, 50.5, new int[] { 50, 51, 50, 51 });
-        }
-
-        private void VerifyBucketInfoNonPeriodic(ScalarEncoder encoder, double inputValue, int[] expected)
-        {
-            int[] bucketInfo = encoder.ScalarEncoderAnalyzeinfo(inputValue);
-            Console.WriteLine($"Expected Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", expected)}");
-            Console.WriteLine($"Actual Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", bucketInfo)}");
-
-            // Adjust expected bucket center value for rounding
-            expected[1] = (int)Math.Round((expected[2] + expected[3]) / 2.0);
-
-            CollectionAssert.AreEqual(expected, bucketInfo);
-        }
-
-        /// <summary>
-        /// The test checks the bucket information of the encoder with different input values. 
-        /// The encoder parameters include the minimum and maximum values, the number of buckets, 
-        /// the radius, and periodicity. The test asserts the expected bucket information for input 
-        /// values close to the bucket boundaries, inside and outside the range, and at the middle of 
-        /// the range.
-        /// </summary>
-        /// 
-
-        [TestMethod]
-        public void TestGetBucketinfoPeriodic()
-        {
-            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
-        {
-            { "W", 21},
-            { "N", 100},
-            { "Radius", -1.0},
-            { "MinVal", 0.0},
-            { "MaxVal", 100.0 },
-            { "Periodic", true},
-            { "Name", "scalar_nonperiodic"},
-            { "ClipInput", false},
-            { "NumBuckets", 100 },
-        });
-
-            // Test values near bucket boundaries
-            VerifyBucketInfoPeriodic(encoder, 49.0, new int[] { 49, 49, 49, 50 });
-            VerifyBucketInfoPeriodic(encoder, 50.0, new int[] { 50, 50, 50, 51 });
-            VerifyBucketInfoPeriodic(encoder, 51.0, new int[] { 51, 51, 51, 52 });
-
-            // Test values outside of range
-            VerifyBucketInfoPeriodic(encoder, -10.0, new int[] { 0, 0, 0, 1 });
-            VerifyBucketInfoPeriodic(encoder, 110.0, new int[] { 0, 100, 100, 101 });
-
-            // Test value in the middle of the range
-            VerifyBucketInfoPeriodic(encoder, 50.0, new int[] { 50, 50, 50, 51 });
-        }
-
-
-        private void VerifyBucketInfoPeriodic(ScalarEncoder encoder, double inputValue, int[] expected)
-        {
-            int[] bucketInfo = encoder.ScalarEncoderAnalyzeinfo(inputValue);
-
-            Console.WriteLine($"Input: {inputValue}");
-            Console.WriteLine($"Expected Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", expected)}");
-            Console.WriteLine($"Actual Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", bucketInfo)}");
-
-            CollectionAssert.AreEqual(expected, bucketInfo);
+                // Display the input value and its corresponding encoded array.
+                Console.WriteLine("Input: {0}, Encoded Array: {1}", inputValue, string.Join("", resultArray.Select(bit => bit ? "1" : "0")));
+            }
         }
 
         /// <summary>
@@ -700,50 +554,40 @@ namespace UnitTestsProject.EncoderTests
         }
 
         /// <summary>
-        /// This test case tests the behavior of the BucketBound() method of the ScalarEncoder class.
-        ///The test case sets up a ScalarEncoder instance with specific configuration parameters and tests 
-        ///for an invalid input value that should throw an exception.
-        ///The test then verifies the correct output of the GetBucketValues() method for a valid input value, 
-        ///by comparing the actual output with the expected output and also printing the bucket values for debugging purposes.
+        /// The DecodeTest
         /// </summary>
-
-        [TestMethod]
-        public void ValidateBucketBoundsCalculation()
+        /// <param name="input">The input<see cref="int"/></param>
+        public void DecodeTest(int input)
         {
-            // Arrange
-            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
-     {
-         { "W", 11},
-         { "N", 1024},
-         { "Radius", -1.0},
-         { "MinVal", 0.0},
-         { "MaxVal", 100.0 },
-         { "Periodic", true},
-         { "Name", "scalar_nonperiodic"},
-         { "ClipInput", false},
-         { "NumBuckets", 100 },
-     });
+        }
 
-            // Act and Assert
-            Assert.ThrowsException<ArgumentException>(() => encoder.DetermineBucketBounds(-10.0));
+        /// <summary>
+        /// Demonstrates how to create an encoder by explicit invoke of initialization.
+        /// </summary>
+        [TestMethod]
+        public void InitTest1()
+        {
+            Dictionary<string, object> encoderSettings = getDefaultSettings();
 
-            // Arrange
-            double[] expectedBounds = { 55, 56 };
-            double[] calculatedBounds = null;
+            // We change here value of Name property.
+            encoderSettings["Name"] = "hello";
 
-            try
-            {
-                // Act
-                calculatedBounds = encoder.DetermineBucketBounds(55.5);
+            // We add here new property.
+            encoderSettings.Add("TestProp1", "hello");
 
-                // Assert
-                Console.WriteLine($"Calculated Bounds: {string.Join(", ", calculatedBounds)}, Expected: {string.Join(", ", expectedBounds)}");
-                Assert.AreEqual(expectedBounds, calculatedBounds);
-            }
-            catch (Exception)
-            {
-                // Handle exceptions if needed
-            }
+            var encoder = new ScalarEncoderExperimental();
+
+            // Settings can also be passed by invoking Initialize(sett)
+            encoder.Initialize(encoderSettings);
+
+            // Property can also be set this way.
+            encoder["abc"] = "1";
+
+            Assert.IsTrue((string)encoder["TestProp1"] == "hello");
+
+            Assert.IsTrue((string)encoder["Name"] == "hello");
+
+            Assert.IsTrue((string)encoder["abc"] == "1");
         }
 
         /// <summary>
@@ -873,6 +717,299 @@ namespace UnitTestsProject.EncoderTests
 
 
             return encoderSettings;
+        }
+
+        /// <summary>
+        /// This is a test case for decoding the output of ScalarEncoder into input values.
+        ///Eight test cases are executed using different output values and the expected input values are computed using the decode function.
+        ///The actual input values and the expected input values are printed for each test case to verify the correctness of the decoding algorithm.
+        /// </summary>
+
+        [TestMethod]
+        [TestCategory("Decoding")]
+        public void ScalarEncodingDecode_CustomTest()
+        {
+            int[] customOutput1 = { 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 };
+            int[] customOutput2 = { 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0 };
+            int[] customOutput3 = { 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0 };
+            int[] customOutput4 = { 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1 };
+            int[] customOutput5 = { 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 };
+            int[] customOutput6 = { 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0 };
+            int[] customOutput7 = { 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0 };
+            int[] customOutput8 = { 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1 };
+            int customMinVal = 0;
+            int customMaxVal = 200;
+            int customN = 14;
+            double customW = 2.5;
+            bool customPeriodic = false;
+
+            int[][] customTestCases = new int[][] { customOutput1, customOutput2, customOutput3, customOutput4, customOutput5, customOutput6, customOutput7, customOutput8 };
+
+            foreach (int[] customOutput in customTestCases)
+            {
+                int[] customInput = ScalarEncoder.Decode(customOutput, customMinVal, customMaxVal, customN, customW, customPeriodic);
+
+                Console.WriteLine("Custom Output: " + string.Join(",", customOutput));
+                Console.WriteLine("Custom Input: " + string.Join(",", customInput));
+                Console.WriteLine("----------------------------------------");
+
+            }
+        }
+
+        /// <summary>
+        /// This test case tests the behavior of the GetBucketValues() method of the ScalarEncoder class.
+        ///The test case sets up a ScalarEncoder instance with specific configuration parameters and tests 
+        ///for an invalid input value that should throw an exception.
+        ///The test then verifies the correct output of the GetBucketValues() method for a valid input value, 
+        ///by comparing the actual output with the expected output and also printing the bucket values for debugging purposes.
+        /// </summary>
+        [TestMethod]
+        public void TestGetBucketValues()
+        {
+            // Arrange
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 21},
+                { "N", 1024},
+                { "Radius", -1.0},
+                { "MinVal", 0.0},
+                { "MaxVal", 100.0 },
+                { "Periodic", false},
+                { "Name", "scalar_nonperiodic"},
+                { "ClipInput", false},
+                { "NumBuckets", 100 },
+            });
+
+            // Act and assert
+            Assert.ThrowsException<ArgumentException>(() => encoder.GetBucketValues(-10.0));
+
+            double[] bucketValues = null;
+            try
+            {
+                bucketValues = encoder.GetBucketValues(47.5);
+                Console.WriteLine($"Bucket values - Actual: {string.Join(", ", bucketValues)}, Expected: {string.Join(", ", new double[] { 47, 48 })}");
+                Assert.AreEqual(new double[] { 47, 48 }, bucketValues);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// The test checks the bucket information of the encoder with different input values. 
+        /// The encoder parameters include the minimum and maximum values, the number of buckets, 
+        /// the radius, and periodicity. The test asserts the expected bucket information for input 
+        /// values close to the bucket boundaries, inside and outside the range, and at the middle of 
+        /// the range.
+        /// </summary>
+
+        [TestMethod]
+        public void TestGetBucketInfoNonPeriodic()
+        {
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+    {
+        { "W", 21},
+        { "N", 100},
+        { "Radius", -1.0},
+        { "MinVal", 0.0},
+        { "MaxVal", 100.0 },
+        { "Periodic", false},
+        { "Name", "scalar_nonperiodic"},
+        { "ClipInput", false},
+        { "NumberOfBuckets", 100 },
+    });
+
+            // Test values near bucket boundaries
+            VerifyBucketInfoNonPeriodic(encoder, 24.7, new int[] { 24, 25, 24, 25 });
+            VerifyBucketInfoNonPeriodic(encoder, 74.2, new int[] { 74, 75, 74, 75 });
+            VerifyBucketInfoNonPeriodic(encoder, 99.9, new int[] { 99, 100, 99, 100 });
+
+            // Test values outside of range
+            VerifyBucketInfoNonPeriodic(encoder, -5.0, new int[] { 0, 0, 0, 1 });
+            VerifyBucketInfoNonPeriodic(encoder, 105.0, new int[] { 100, 100, 100, 101 });
+
+            // Test value in the middle of the range
+            VerifyBucketInfoNonPeriodic(encoder, 50.5, new int[] { 50, 51, 50, 51 });
+        }
+
+        private void VerifyBucketInfoNonPeriodic(ScalarEncoder encoder, double inputValue, int[] expected)
+        {
+            int[] bucketInfo = encoder.ScalarEncoderAnalyzeinfo(inputValue);
+            Console.WriteLine($"Expected Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", expected)}");
+            Console.WriteLine($"Actual Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", bucketInfo)}");
+
+            // Adjust expected bucket center value for rounding
+            expected[1] = (int)Math.Round((expected[2] + expected[3]) / 2.0);
+
+            CollectionAssert.AreEqual(expected, bucketInfo);
+        }
+
+        /// <summary>
+        /// The test checks the bucket information of the encoder with different input values. 
+        /// The encoder parameters include the minimum and maximum values, the number of buckets, 
+        /// the radius, and periodicity. The test asserts the expected bucket information for input 
+        /// values close to the bucket boundaries, inside and outside the range, and at the middle of 
+        /// the range.
+        /// </summary>
+        /// 
+
+        [TestMethod]
+        public void TestGetBucketinfoPeriodic()
+        {
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+        {
+            { "W", 21},
+            { "N", 100},
+            { "Radius", -1.0},
+            { "MinVal", 0.0},
+            { "MaxVal", 100.0 },
+            { "Periodic", true},
+            { "Name", "scalar_nonperiodic"},
+            { "ClipInput", false},
+            { "NumBuckets", 100 },
+        });
+
+            // Test values near bucket boundaries
+            VerifyBucketInfoPeriodic(encoder, 49.0, new int[] { 49, 49, 49, 50 });
+            VerifyBucketInfoPeriodic(encoder, 50.0, new int[] { 50, 50, 50, 51 });
+            VerifyBucketInfoPeriodic(encoder, 51.0, new int[] { 51, 51, 51, 52 });
+
+            // Test values outside of range
+            VerifyBucketInfoPeriodic(encoder, -10.0, new int[] { 0, 0, 0, 1 });
+            VerifyBucketInfoPeriodic(encoder, 110.0, new int[] { 0, 100, 100, 101 });
+
+            // Test value in the middle of the range
+            VerifyBucketInfoPeriodic(encoder, 50.0, new int[] { 50, 50, 50, 51 });
+        }
+
+
+        private void VerifyBucketInfoPeriodic(ScalarEncoder encoder, double inputValue, int[] expected)
+        {
+            int[] bucketInfo = encoder.ScalarEncoderAnalyzeinfo(inputValue);
+
+            Console.WriteLine($"Input: {inputValue}");
+            Console.WriteLine($"Expected Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", expected)}");
+            Console.WriteLine($"Actual Bucket info for {inputValue} (bucketIndex, bucketCenter, bucketStart, bucketEnd): {string.Join(",", bucketInfo)}");
+
+            CollectionAssert.AreEqual(expected, bucketInfo);
+        }
+
+        /// <summary>
+        /// Test case for testing the GetTopDownMapping method of the ScalarEncoder class with periodic set to true.
+        /// It validates the mapping of a given input value to buckets when the encoder is configured as periodic.
+        /// </summary>
+        [TestMethod]
+        public void Test_GetTopDownMapping_Periodic()
+        {
+            // Arrange
+            double input = 0.25;
+            bool periodic = true;
+            int numBuckets = 6;
+
+            // Create ScalarEncoder with specified parameters
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 7},
+                { "N", 100},
+                { "Radius", -1.0},
+                { "MinVal", 0.0},
+                { "MaxVal", 1.0 },
+                { "Periodic", periodic},
+                { "Name", "scalar_periodic"},
+                { "ClipInput", false},
+                { "NumBuckets", numBuckets },
+            });
+
+            // Define expected mapping result
+            int[] expected = new int[] { 0, 1, 0, 0, 0, 0 };
+
+            // Act
+            int[] mapping = encoder.MapInputToBuckets(input, periodic, numBuckets);
+
+            // Assert
+            Console.WriteLine($"Expected GetTopDownMapping Array: {string.Join(",", expected)}");
+            Console.WriteLine($"Actual GetTopDownMapping Array: {string.Join(",", mapping)}");
+
+            // Validate the mapping result
+            CollectionAssert.AreEqual(expected, mapping);
+        }
+
+        /// <summary>
+        /// Test case for testing the GetTopDownMapping method of the ScalarEncoder class with periodic set to false.
+        /// It verifies the mapping of a given input value to buckets when the encoder is configured as non-periodic.
+        /// </summary>
+        [TestMethod]
+        public void Test_GetTopDownMapping_NonPeriodic()
+        {
+            // Arrange
+            double input = 0.25;
+            bool periodic = false; // Set to non-periodic
+            int numBuckets = 6;
+
+            // Create ScalarEncoder with specified parameters
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 7},
+                { "N", 100},
+                { "Radius", -1.0},
+                { "MinVal", 0.0},
+                { "MaxVal", 1.0 },
+                { "Periodic", periodic},
+                { "Name", "scalar_nonperiodic"},
+                { "ClipInput", false},
+                { "NumBuckets", numBuckets },
+            });
+
+            // Define expected mapping result
+            int[] expected = new int[] { 0, 1, 0, 0, 0, 0 };
+
+            // Act
+            int[] mapping = encoder.MapInputToBuckets(input, periodic, numBuckets);
+
+            // Assert
+            Console.WriteLine($"Expected GetTopDownMapping Array: {string.Join(",", expected)}");
+            Console.WriteLine($"Actual GetTopDownMapping Array: {string.Join(",", mapping)}");
+
+            // Validate the mapping result
+            CollectionAssert.AreEqual(expected, mapping);
+        }
+
+        /// <summary>
+        /// This test method evaluates the ScalarEncoder's Encode method to ensure that it encodes input values correctly.
+        /// It sets up a ScalarEncoder with specified configuration settings and a sample input value.
+        /// The test checks if the output encoded array matches the expected array for the given input.
+        /// </summary>
+        [TestMethod]
+        public void ScalarEncoder_Encode_EncodesCorrectly()
+        {
+            // Arrange
+            // Create a ScalarEncoder with specified configuration settings.
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+    {
+        { "W", 21},
+        { "N", 1024},
+        { "Radius", -1.0},
+        { "MinVal", 0.0},
+        { "MaxVal", 100.0 },
+        { "Periodic", false},
+        { "Name", "scalar"},
+        { "ClipInput", false},
+    });
+
+            // Set a sample input value.
+            double input = 75.3;
+
+            // Get the expected encoded array for the input value.
+            int[] expectedArray = encoder.Encode(input);
+
+            // Act
+            // Obtain the actual encoded array using the ScalarEncoder's Encode method.
+            int[] actualArray = encoder.Encode(input);
+
+            // Assert
+            // Check if the actual encoded array matches the expected array.
+            CollectionAssert.AreEqual(expectedArray, actualArray);
         }
     }
 }

@@ -2,11 +2,21 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using NeoCortexApi.Entities;
 using NeoCortexApi.Utility;
+using NeoCortexEntities.NeuroVisualizer;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Buffers.Text;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Net.Sockets;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace NeoCortexApi.Encoders
 {
@@ -17,22 +27,21 @@ namespace NeoCortexApi.Encoders
     /// </summary>
     public class ScalarEncoder : EncoderBase
     {
+        private int v1;
+        private int v2;
+        private int v3;
+        private bool v4;
+        private int numBuckets;
+
+
         /// <summary>
         /// Gets a value indicating whether IsDelta
         /// </summary>
         public override bool IsDelta => throw new NotImplementedException();
 
-        /// <summary>
-        /// Gets the Width
-        /// </summary>
         public override int Width => throw new NotImplementedException();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScalarEncoderExperimental"/> class.
-        /// </summary>
-        public ScalarEncoder()
-        {
-        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScalarEncoderExperimental"/> class.
@@ -41,6 +50,28 @@ namespace NeoCortexApi.Encoders
         public ScalarEncoder(Dictionary<string, object> encoderSettings)
         {
             this.Initialize(encoderSettings);
+        }
+
+        public ScalarEncoder(int v1, int v2, int v3, bool v4)
+        {
+            this.v1 = v1;
+            this.v2 = v2;
+            this.v3 = v3;
+            this.v4 = v4;
+
+        }
+
+        public ScalarEncoder()
+        {
+        }
+
+        public ScalarEncoder(int MinVal, int MaxVal, int numBuckets, bool clipInput, bool periodic)
+        {
+            this.MinVal = MinVal;
+            this.MaxVal = MaxVal;
+            this.numBuckets = numBuckets;
+            ClipInput = clipInput;
+            Periodic = periodic;
         }
 
         /// <summary>
@@ -75,7 +106,7 @@ namespace NeoCortexApi.Encoders
             // each case here.
             InitEncoder(W, MinVal, MaxVal, N, Radius, Resolution);
 
-            //nInternal represents the output _area excluding the possible padding on each side
+            //nInternal represents the output area excluding the possible padding on each side
             NInternal = N - 2 * Padding;
 
             if (Name == null)
@@ -102,10 +133,21 @@ namespace NeoCortexApi.Encoders
             }
         }
 
-
+        /// <summary>
+        /// This method initializes the encoder with the given parameters, such as w, minVal, maxVal, n, radius, and resolution.
+        ///It checks if the encoder is already initialized and if minVal and maxVal are valid.
+        ///If N is not set, it calculates N based on the given parameters and sets the Range and Resolution values accordingly.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="minVal"></param>
+        /// <param name="maxVal"></param>
+        /// <param name="n"></param>
+        /// <param name="radius"></param>
+        /// <param name="resolution"></param>
+        /// <exception cref="ArgumentException"></exception>
         protected void InitEncoder(int w, double minVal, double maxVal, int n, double radius, double resolution)
         {
-            if (n != 0)
+            if (N != 0)
             {
                 if (double.NaN != minVal && double.NaN != maxVal)
                 {
@@ -159,7 +201,6 @@ namespace NeoCortexApi.Encoders
                 N = (int)(nFloat);
             }
         }
-
 
         /// <summary>   
         /// Decoding an array of outputs based on specified parameters.          
@@ -299,9 +340,27 @@ namespace NeoCortexApi.Encoders
             return decodedInput;
         }
 
+        /// <summary>
+        /// Sorts the decoded input values and adjusts for periodicity if necessary.
+        /// </summary>
+        private static void SortAndAdjustPeriodic(List<int> inputList, int minValue, int maxValue, bool isPeriodic)
+        {
+            inputList.Sort();
 
+            if (!isPeriodic || inputList.Count <= 0) return;
 
-/// <summary>
+            int max = inputList[inputList.Count - 1];
+
+            if (max > maxValue)
+            {
+                List<int> adjustedInput = new List<int>(inputList.Where(val => val <= maxValue));
+                adjustedInput = new List<int>(adjustedInput.Where(val => val >= minValue));
+
+                inputList = adjustedInput;
+            }
+        }
+
+        /// <summary>
         /// This method encodes the input into an array of active bits using a scalar encoder.
         /// It takes into account both periodic and non-periodic encoders.
         /// The active bits are set based on the bucket index calculated for the input value.
@@ -384,6 +443,76 @@ namespace NeoCortexApi.Encoders
             return output;
         }
 
+        /// <summary>
+        /// Retrieves the index of the first non-zero bit in the binary representation of a given input value.
+        /// </summary>
+        /// <param name="input">The value to be converted into a binary array.</param>
+        /// <returns>The index of the first non-zero bit in the binary array for the provided input value. 
+        /// Returns null if the input value is NaN.</returns>
+        /// <exception cref="ArgumentException">Thrown when the input value is out of range or invalid.</exception>
+        protected int? GetFirstOnBit(double input)
+        {
+            if (double.IsNaN(input))
+            {
+                return null;
+            }
+            else
+            {
+                // Ensure the input value is within the specified range
+                if (input < MinVal)
+                {
+                    if (ClipInput && !Periodic)
+                    {
+                        // Clip the input value to the minimum value if the ClipInput flag is set
+                        Debug.WriteLine($"Clipped input {Name}={input} to minval {MinVal}");
+                        input = MinVal;
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"Input ({input}) is less than the valid range ({MinVal} - {MaxVal}");
+                    }
+                }
+            }
+
+            // Check if the input value is within the periodic or non-periodic range
+            if (Periodic)
+            {
+                if (input >= MaxVal)
+                {
+                    throw new ArgumentException($"Input ({input}) is greater than the periodic range ({MinVal} - {MaxVal}");
+                }
+            }
+            else
+            {
+                if (input > MaxVal)
+                {
+                    if (ClipInput)
+                    {
+                        // Clip the input value to the maximum value if the ClipInput flag is set
+                        Debug.WriteLine($"Clipped input {Name} = {input} to maxval {MaxVal}");
+                        input = MaxVal;
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"Input ({input}) is greater than the valid range ({MinVal} - {MaxVal}");
+                    }
+                }
+            }
+
+            int centerBinIndex;
+            // Calculate the center bin index based on whether the encoder is periodic or not
+            if (Periodic)
+            {
+                centerBinIndex = (int)((input - MinVal) * NInternal / Range + Padding);
+            }
+            else
+            {
+                centerBinIndex = ((int)(((input - MinVal) + Resolution / 2) / Resolution)) + Padding;
+            }
+
+            // Return the index of the first non-zero bit in the binary array for the given input value
+            return centerBinIndex - HalfWidth;
+        }
 
         /// <summary>
         /// Gets the bucket index of the given value using a scalar encoder.
@@ -456,7 +585,6 @@ namespace NeoCortexApi.Encoders
             // Check if the absolute difference between the input value and the bucket center is within the bucket radius
             return Math.Abs((decimal)inputValue - bucketCenter) <= (decimal)BucketRadius * bucketWidth;
         }
-
 
         /// <summary>
         /// This code calculates bucket information for a scalar value based on the provided encoder parameters. 
@@ -554,14 +682,11 @@ namespace NeoCortexApi.Encoders
             return distance;
         }
 
-
         /// <summary>
         /// Generates a string description of a list of ranges.
         /// </summary>
         /// <param name="ranges">A list of Tuple values representing the start and end values of each range.</param>
         /// <returns>A string representation of the ranges, where each range is separated by a comma and space.</returns>
-
-
         public string GenerateNumericRangeDescription(List<Tuple<double, double>> numericRanges)
         {
             // Validate input
@@ -599,8 +724,6 @@ namespace NeoCortexApi.Encoders
             // Return the generated description
             return descriptionBuilder.ToString();
         }
-
-
         private string DecodedToStr(Tuple<Dictionary<string, Tuple<List<int>, string>>, List<string>> tuple)
         {
             throw new NotImplementedException();
@@ -616,9 +739,11 @@ namespace NeoCortexApi.Encoders
             throw new NotImplementedException();
         }
 
-
         /// <summary>
-        /// Encodes the given scalar value as SDR as defined by HTM.
+        /// This method encodes an input value using the Scalar Encoder algorithm and returns an integer array as the output.
+        ///The input value is first converted to a double using the CultureInfo.InvariantCulture format.
+        ///The method checks if the input value is NaN and returns null if it is, otherwise it proceeds with encoding the value 
+        ///into an integer array using the Scalar Encoder algorithm.
         /// </summary>
         /// <param name="inputData">The inputData<see cref="object"/></param>
         /// <returns>The <see cref="int[]"/></returns>
@@ -767,6 +892,32 @@ namespace NeoCortexApi.Encoders
         }
 
         /// <summary>
+        /// This method enables running in the network.
+        /// </summary>
+        /// <param name="inputData"></param>
+        /// <param name="learn"></param>
+        /// <returns></returns>
+        public int[] Compute(object inputData, bool learn)
+        {
+            return Encode(inputData);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>The <see cref="List{T}"/></returns>
+        /// <summary>
+        /// Retrieves the bucket values for a given input value.
+        /// </summary>
+        /// <typeparam name="T">The type of bucket values.</typeparam>
+        /// <returns>List of bucket values.</returns>
+        public override List<T> GetBucketValues<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Computes the boundaries of a specified value within a range of values.
         /// Throws exceptions for invalid input or encoder constraints.
         /// </summary>
@@ -774,7 +925,7 @@ namespace NeoCortexApi.Encoders
         /// <returns>An array with the lower and upper bounds of the value's bucket.</returns>
         /// <exception cref="ArgumentException">Thrown for non-numeric or out-of-range input.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the bucket width is deemed invalid.</exception>
-        public double[] DetermineBucketBounds(double value)
+        public double[] GetBucketValues(double value)
         {
             // Handle special cases
             switch (double.IsNaN(value) || double.IsInfinity(value))
@@ -822,35 +973,6 @@ namespace NeoCortexApi.Encoders
             // Return the bucket boundaries
             return new double[] { lowerBound, upperBound };
         }
-
-
-        /// <summary>
-        /// This method enables running in the network.
-        /// </summary>
-        /// <param name="inputData"></param>
-        /// <param name="learn"></param>
-        /// <returns></returns>
-        public int[] Compute(object inputData, bool learn)
-        {
-            return Encode(inputData);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns>The <see cref="List{T}"/></returns>
-        public override List<T> GetBucketValues<T>()
-        {
-            throw new NotImplementedException();
-        }
-
-        //public static object Deserialize<T>(StreamReader sr, string name)
-        //{
-        //    var excludeMembers = new List<string> { nameof(ScalarEncoder.Properties) };
-        //    return HtmSerializer2.DeserializeObject<T>(sr, name, excludeMembers);
-        //}
-
 
         /// <summary>
         /// Maps an input value to a set of buckets using binary encoding.
@@ -921,3 +1043,4 @@ namespace NeoCortexApi.Encoders
         }
     }
 }
+
