@@ -31,7 +31,7 @@ Moreover, the Scalar Encoder with Buckets supports periodic encoding of values, 
 #### Methods:
 Here are the various methods and code snippets we implemented sequentially to realize the scalar encoder using buckets.
 
-![Implementation Methods](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/assets/116574834/fcdc570f-dc19-481e-9de8-230f16c91752)
+![Implementation Methods](./images/Implementation%20Methods.png)
 
 
 
@@ -775,17 +775,17 @@ Group member:
 
 Test cases were passed
 
-![Unit Test result](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/assets/116574834/c646e7cc-26e9-497b-b779-58f853759415)
+![Unit Test result](./images/Unit%20Test%20result.png)
 
 
 Periodic and Non-periodic test cases outputs for the method GetBucketIndex
 
 
 Periodic:
-![alt text](periodic-1.png)
+![alt text](./images/periodic-1.png)
 
 Non-Periodic:
-![alt text](non-periodic-1.png)
+![alt text](./images/non-periodic-1.png)
 
 #### Comparison of approach for newly implemented methods and old methods:
 
