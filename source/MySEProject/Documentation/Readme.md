@@ -31,7 +31,8 @@ Moreover, the Scalar Encoder with Buckets supports periodic encoding of values, 
 #### Methods:
 Here are the various methods and code snippets we implemented sequentially to realize the scalar encoder using buckets.
 
-![alt text](12-1.png)
+![Implementation Methods](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/assets/116574834/fcdc570f-dc19-481e-9de8-230f16c91752)
+
 
 
 GetFirstOnBit: The bit offset of the first bit to be set in the encoder output is returned.
@@ -773,6 +774,7 @@ Group member:
 
 
 Test cases were passed
+
 ![Unit Test result](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/assets/116574834/c646e7cc-26e9-497b-b779-58f853759415)
 
 
