@@ -760,19 +760,6 @@ In conclusion, the Scalar Encoder with Buckets represents an enhanced iteration 
     [GetBucketValue](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L928),
     [ScalarEncoderAnalyzeinfo](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L598),
 
-   Documentation [Click Here](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/tree/master/source/MySEProject/Documentation)
-
-   Link for test cases code [Click Here](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/master/source/UnitTestsProject/EncoderTests/ScalarEncoderTests.cs)
-
-Forked from:
-https://github.com/ddobric/neocortexapi
-
-Group Name: Team_ScalarEncoder
-
-Group member:
- Commits link:      [Aqib Javed](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/tree/Aqib-Javed) 
-
-
 Test cases were passed
 
 ![Unit Test result](./images/Unit%20Test%20result.png)
