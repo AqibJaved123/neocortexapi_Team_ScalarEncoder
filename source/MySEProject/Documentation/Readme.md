@@ -773,7 +773,8 @@ Group member:
 
 
 Test cases were passed
-![alt text](UnitTestPassed-1.png)
+![Unit Test result](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/assets/116574834/c646e7cc-26e9-497b-b779-58f853759415)
+
 
 Periodic and Non-periodic test cases outputs for the method GetBucketIndex
 
