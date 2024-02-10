@@ -30,7 +30,8 @@ Moreover, the Scalar Encoder with Buckets supports periodic encoding of values, 
 
 #### Methods:
 Here are the various methods and code snippets we implemented sequentially to realize the scalar encoder using buckets.
-![Methods](https://github.com/UniversityOfAppliedSciencesFrankfurt/se-cloud-2023-2024/assets/116574834/147f5071-1ce5-43b4-a28a-f7b2c6fcd325)
+
+![alt text](12-1.png)
 
 
 GetFirstOnBit: The bit offset of the first bit to be set in the encoder output is returned.
@@ -782,3 +783,31 @@ Periodic:
 
 Non-Periodic:
 ![alt text](non-periodic-1.png)
+
+#### Comparison of approach for newly implemented methods and old methods:
+
+- Encoded Array:
+The Encode() function produces a BitArray instance containing the encoded binary form of the input scalar value. 
+In contrast, the EncodeIntoArray() function accepts a pre-existing boolean array as input and directly encodes the scalar value into this array. 
+Therefore, both functions serve the purpose of converting scalar values into binary arrays, but Encode() generates a fresh BitArray object, 
+while EncodeIntoArray() alters an already allocated boolean array.
+
+
+- GetBucketIndex:
+Newly implemented method for GetBucketIndex explicitly checks if the input value is outside the valid range specified by MinVal and MaxVal,
+and returns null in that case.
+It also normalizes the input value to a fraction within the range [0, 1] using CalculateNormalizedFraction().
+Bucket Index Calculation:
+It calculates the bucket index based on the normalized fraction and the total number of buckets as well as 
+handles periodic conditions by adjusting the fraction and checking if the input value lies within a specified bucket radius.
+All methods CalculateNormalizedFraction(), CalculateBucketIndex(), and IsWithinBucketRadius() are private, encapsulated within the class, 
+comprehensive implementation, handling a wider range of scenarios such as out-of-range values, normalization, and periodic conditions. 
+It also maintains better encapsulation by keeping certain methods private. 
+
+- GetBucketValue:
+Existing method appears to be a placeholder or incomplete implementation. 
+It's marked as overriding a base method but throws a NotImplementedException, indicating that the functionality is not yet implemented.
+But the new method computes the boundaries of a specified value within a range of values. 
+It handles various exceptional cases such as NaN or infinity inputs and throws specific exceptions accordingly.
+New code provides a complete and well-implemented method for computing bucket boundaries, 
+including error handling, comments, and a clear return type.
