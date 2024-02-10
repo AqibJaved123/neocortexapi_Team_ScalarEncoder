@@ -791,9 +791,9 @@ Non-Periodic:
 
 - Encoded Array:
 The Encode() function produces a BitArray instance containing the encoded binary form of the input scalar value. 
-In contrast, the EncodeIntoArray() function accepts a pre-existing boolean array as input and directly encodes the scalar value into this array. 
+In contrast, the EncodedArray() function accepts a pre-existing boolean array as input and directly encodes the scalar value into this array. 
 Therefore, both functions serve the purpose of converting scalar values into binary arrays, but Encode() generates a fresh BitArray object, 
-while EncodeIntoArray() alters an already allocated boolean array.
+while EncodedArray() alters an already allocated boolean array.
 
 
 - GetBucketIndex:
