@@ -750,14 +750,14 @@ In conclusion, the Scalar Encoder with Buckets represents an enhanced iteration 
 
 #### Link to project :
  Program links for different methods
-    [BucketMatchScore ](https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/cc85aed8060d240ea4ff818684f94add2d13bf5f/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L701 ), 
-    [EncodedArray ](https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/cc85aed8060d240ea4ff818684f94add2d13bf5f/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L346 ), 
-    [Decode ]( https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/cc85aed8060d240ea4ff818684f94add2d13bf5f/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L241) ,
-    [ ScalarEncoderDetermineBucketIndex](https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/cc85aed8060d240ea4ff818684f94add2d13bf5f/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L475) ,
-    [MapInputToBuckets ]( https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/cc85aed8060d240ea4ff818684f94add2d13bf5f/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L817) ,
-    [GenerateNumericRangeDescription ]( https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/cc85aed8060d240ea4ff818684f94add2d13bf5f/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L599 ) ,
-    [DetermineBucketBounds ]( https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/cc85aed8060d240ea4ff818684f94add2d13bf5f/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L769 ),
-    [ScalarEncoderAnalyzeinfo](https://github.com/sahithkumar1999/neocortexapi_Team_SpiralGanglion/blob/3a2546872cbd9d96a7233fdd8125a1a7053b45b4/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L527),
+    [BucketMatchScore ](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L796), 
+    [EncodedArray ](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L371), 
+    [Decode ](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L217) ,
+    [ ScalarEncoderDetermineBucketIndex](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L522) ,
+    [MapInputToBuckets ](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L984) ,
+    [GenerateNumericRangeDescription ](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L690) ,
+    [GetBucketValue](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L928),
+    [ScalarEncoderAnalyzeinfo](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/blob/1de23d9fbd0e812094878ec2228ba4f1f018329c/source/NeoCortexApi/Encoders/ScalarEncoder.cs#L598),
 
    Documentation [Click Here](https://github.com/AqibJaved123/neocortexapi_Team_ScalarEncoder/tree/master/source/MySEProject/Documentation)
 
